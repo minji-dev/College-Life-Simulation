@@ -48,7 +48,7 @@ class TextGame {
 
         currentPageIndex += 1;            
         if (currentBranch.pages.length == this._currentPageIndex) {
-            this._canvasController.endScreen("END (Error)");
+            this._canvasController.endScreen(_currentBranch.endingText);
         } 
     }
 
@@ -108,29 +108,19 @@ class TextGame {
 
     //canvasEvent: CanvasEvent
     canvasProcess(canvasEvent) {
-        switch (canvasEvent.textBarEventType) {
-            case TextBarEventType.Text:
-                textBarController.setText(textBarEvent.eventData.name, textBarEvent.eventData.text);
+        switch (canvasEvent.canvasEventType) {
+            case CanvasEventType.AddImage:
                 break;
 
-            case TextBarEventType.Branch:
-                let branchResult = textBarController.showBranch(textBarEvent.eventData.filter(function(x) { return x.name }));
-                let jumpBranchName = textBarEvent.eventData.find(function(item) { return item === branchResult });
-                if (jumpBranchName === null) {
-                    this._canvasController.endScreen("END (Error)");
-                    return;
-                } else {
-                    let jumpBranch = this._branchManager.getBranch(jumpBranchName);
-                    if (jumpBranchName === null) {
-                        this._canvasController.endScreen("END (Error)");
-                        return;
-                    } else {
-                        this._currentBranch = jumpBranch;
-                        this._currentPageIndex = 0;
-                    }
-                }
+            case CanvasEventType.ChangeBackGround:
+
                 break;
-        
+            case CanvasEventType.DrawText:
+
+                break;
+            case CanvasEventType.RemoveObject:
+
+                break;
             default:
                 break;
         }
@@ -280,7 +270,7 @@ class CanvasEvent extends BaseEvent {
 
     //return: CanvasEvent
     static changeBackGround() { 
-        
+
     }
 
     //return: CanvasEvent
@@ -292,6 +282,8 @@ class CanvasEvent extends BaseEvent {
     static removeObject() { 
 
     }
+
+    get canvasEventType() { return this._canvasEventType; }
 }
 
 class ImagePair {
