@@ -1,50 +1,62 @@
+import React from 'react';
+
 class TextGame {
     constructor() {
-        this.textBarController = new TextBarController();
-        this.canvasController = new CanvasController();
-        this.branchManager = new BranchManager();
-        this.currentBranch = Branch.RootBranch;
-        this.currentPageIndex = 0;
+        this._textBarController = new TextBarController();
+        this._canvasController = new CanvasController();
+        this._branchManager = new BranchManager();
+        this._currentBranch = new Branch("Root", "END");
+        this._currentPageIndex = 0;
+        this._delaytimer = null;
     }
     
-    get textBarController() { return this.textBarController; }
-    get canvasController() { return this.canvasController; }
+    get textBarController() { return this._textBarController; }
+    get canvasController() { return this._canvasController; }
 
     //branch: Branch
     addBranch(branch) {
-        this.branchManager.addBranch(branch);
+        this._branchManager.addBranch(branch);
     }
 
     //branchName: String, return: Branch
     removeBranch(branchName) {
-        return this.branchManager.removeBranch(branchName);
+        return this._branchManager.removeBranch(branchName);
     }
 
     start() {
-        this.textBarController.initTextBar();
-        this.canvasController.initCnavas();
+        this._textBarController.initTextBar();
+        this._canvasController.initCnavas();
     }
 
     nextPage() {
-        let branch = this.currentBranch;
+        if (this._currentBranch.pages[currentpageindex].baseEvents.find(b => {
+            b.eventType === EventType.TextBar && b.textBarEventType === TextbarEventType.Branch
+        }))
+            return;
+        
+        if (_delaytimer !== null)
+            clearTimeout(this._delaytimer);
+        
+        let branch = this._currentBranch;
 
         //currentPage: Page
-        let currentPage = this.currentBranch.pages[currentpageindex];
+        let currentPage = this._currentBranch.pages[currentpageindex];
         //currentEvents: BaseEvent[]
-        let currentEvents = currentPage.pages[currentpageindex].event;
+        let currentEvents = currentPage.baseEvents;
         
         this.eventProcess(currentEvents);
 
         currentPageIndex += 1;            
-        if (currentBranch.pages.count == this.currentPageIndex) {
-            //end
+        if (currentBranch.pages.length == this._currentPageIndex) {
+            this._canvasController.endScreen("END (Error)");
         } 
     }
 
     //baseEvent: BaseEvent[]
     eventProcess(baseEvent){
         //item: BaseEvent 
-        baseEvent.forEach(item => {
+        for (let index = 0; index < baseEvent.length; index++) {
+            const item = array[index];
             switch (item) {
                 case EventType.TextBar:
                     this.textBarProcess(item);
@@ -55,13 +67,13 @@ class TextGame {
                     break;
 
                 case EventType.Delay:
-                            
-                    break;
+                    this.delayProcess(item, index);
+                    return;
             
                 default:
                     break;
             }
-        });
+        }
     }
 
     //textBarEvent: TextBarEvent
@@ -75,16 +87,16 @@ class TextGame {
                 let branchResult = textBarController.showBranch(textBarEvent.eventData.filter(function(x) { return x.name }));
                 let jumpBranchName = textBarEvent.eventData.find(function(item) { return item === branchResult });
                 if (jumpBranchName === null) {
-                    this.canvasController.endScreen("END (Error)");
+                    this._canvasController.endScreen("END (Error)");
                     return;
                 } else {
-                    let jumpBranch = this.branchManager.getBranch(jumpBranchName);
+                    let jumpBranch = this._branchManager.getBranch(jumpBranchName);
                     if (jumpBranchName === null) {
-                        this.canvasController.endScreen("END (Error)");
+                        this._canvasController.endScreen("END (Error)");
                         return;
                     } else {
-                        this.currentBranch = jumpBranch;
-                        this.currentPageIndex = 0;
+                        this._currentBranch = jumpBranch;
+                        this._currentPageIndex = 0;
                     }
                 }
                 break;
@@ -96,7 +108,57 @@ class TextGame {
 
     //canvasEvent: CanvasEvent
     canvasProcess(canvasEvent) {
+        switch (canvasEvent.textBarEventType) {
+            case TextBarEventType.Text:
+                textBarController.setText(textBarEvent.eventData.name, textBarEvent.eventData.text);
+                break;
 
+            case TextBarEventType.Branch:
+                let branchResult = textBarController.showBranch(textBarEvent.eventData.filter(function(x) { return x.name }));
+                let jumpBranchName = textBarEvent.eventData.find(function(item) { return item === branchResult });
+                if (jumpBranchName === null) {
+                    this._canvasController.endScreen("END (Error)");
+                    return;
+                } else {
+                    let jumpBranch = this._branchManager.getBranch(jumpBranchName);
+                    if (jumpBranchName === null) {
+                        this._canvasController.endScreen("END (Error)");
+                        return;
+                    } else {
+                        this._currentBranch = jumpBranch;
+                        this._currentPageIndex = 0;
+                    }
+                }
+                break;
+        
+            default:
+                break;
+        }
+    }
+    
+    //delayEvent: DelayEvent, index: Number
+    delayProcess(delayEvent, index) {
+        this._delaytimer = setTimeout(() => {
+            for (let innerIndex = index + 1; innerIndex < baseEvent.length; innerIndex++) {
+                const item = array[innerIndex];
+                switch (item) {
+                    case EventType.TextBar:
+                        this.textBarProcess(item);
+                        break;
+    
+                    case EventType.Canvas:
+                        this.canvasProcess(item);
+                        break;
+    
+                    case EventType.Delay:
+                        this.delayProcess(item, innerIndex);
+                        return;
+                
+                    default:
+                        break;
+                }
+            }
+        }, delayEvent.delay);
     }
 }
 
@@ -123,32 +185,32 @@ const CanvasEventType = {
 
 class Page {
     constructor() {
-        //events: BaseEvent[]
-        this.events = [];
+        //baseEvents: BaseEvent[]
+        this._baseEvents = [];
     }
 
     //baseEvent: BaseEvent
     addEvent(baseEvent) {
-        events.push(baseEvent);
+        this._baseEvents.push(baseEvent);
     }
 
     //baseEvent: BaseEvent
     removeEvent(baseEvent) {
-        events.push(baseEvent);
+        this._baseEvents.push(baseEvent);
     }
 
-    get events() { return this.events; }
+    get baseEvents() { return this._baseEvents; }
 }
 
 class BaseEvent {
     //eventType: EventType
     constructor(eventType) {
         //eventType: EventType
-        this.eventType = eventType;
+        this._eventType = eventType;
     }
 
     //return: EventType
-    get eventType() { return this.eventType; }
+    get eventType() { return this._eventType; }
 }
 
 class TextBarEvent extends BaseEvent {
@@ -156,9 +218,9 @@ class TextBarEvent extends BaseEvent {
     constructor(textBarEventType, eventData) {
         super(EventType.TextBar);
         //textBarEventType: TextBarEventType
-        this.textBarEventType = textBarEventType;
+        this._textBarEventType = textBarEventType;
         //eventData: any
-        this.eventData = eventData;
+        this._eventData = eventData;
     }
 
     //name: String, text: String
@@ -172,103 +234,123 @@ class TextBarEvent extends BaseEvent {
     }
 
     //return: TextbarEventType
-    get textBarEventType() { return this.textBarEventType; }
+    get textBarEventType() { return this._textBarEventType; }
 }
 
 class TextPair {
     //name: String, text: String
     constructor(name, text) {
-        this.name = name;
-        this.text = text;
+        this._name = name;
+        this._text = text;
     }   
 
     //return: String
-    get name() { return this.name; }
+    get name() { return this._name; }
     
     //return: String
-    get text() { return this.text; }
+    get text() { return this._text; }
 }
 
 class BranchPair {
     //name: String, branch: Branch
     constructor(name, branch) {
-        this.name = name;
-        this.branch = branch;
+        this._name = name;
+        this._branch = branch;
     }   
 
     //return: String
-    get name() { return this.name; }
+    get name() { return this._name; }
     
     //return: Branch
-    get branch() { return this.branch; }
+    get branch() { return this._branch; }
 }
 
 class CanvasEvent extends BaseEvent {
     //canvasEventType: CanvasEventType
     constructor(canvasEventType, eventData) {
         super(EventType.Canvas);
-        this.canvasEventType = canvasEventType;
-        this.eventData = eventData;
+        this._canvasEventType = canvasEventType;
+        this._eventData = eventData;
     }
 
+    //return: CanvasEvent
     static addImage() { 
+        return new CanvasEvent(CanvasEventType.AddImage, new ImagePair(name, src, position, transition));
+    }
+
+    //return: CanvasEvent
+    static changeBackGround() { 
+
+    }
+
+    //return: CanvasEvent
+    static drawText() { 
+
+    }
+
+    //return: CanvasEvent
+    static removeObject() { 
 
     }
 }
 
 class ImagePair {
+    //name: String, src: String, position: ???, transition: String
     constructor(name, src, positon, transition) {
-        this.name = name;
-        this.src = src;
-        this.positon = positon;
-        this.transition = transition;
+        this._name = name;
+        this._src = src;
+        this._positon = positon;
+        this._transition = transition;
     }
 
-    get name() { return this.name; }
-    get src() { return this.src; }
-    get positon() { return this.positon; }
-    get transition() { return this.transition; }
+    get name() { return this._name; }
+    get src() { return this._src; }
+    get positon() { return this._positon; }
+    get transition() { return this._transition; }
 }
 
 class BackGroundPair {
+    //src: String
     constructor(src) {
-        this.src = src;
+        this._src = src;
     }
 
-    get src() { return this.src; }
+    get src() { return this._src; }
 }
 
 class DrawTextPair {
+    //name: String, text: String, positon: ???
     constructor(name, text, positon) {
-        this.name = name;
-        this.text = text;
-        this.positon = positon;
+        this._name = name;
+        this._text = text;
+        this._positon = positon;
     }
 
-    get name() { return this.name; }
-    get text() { return this.text; }
-    get positon() { return this.positon; }
+    get name() { return this._name; }
+    get text() { return this._text; }
+    get positon() { return this._positon; }
 }
 
-class RemoveObjectPair{
+class RemoveObjectPair {
+    //name: String
     constructor(name) {
-        this.name = name;
+        this._name = name;
     }
-    get name() { return this.name; }
+    get name() { return this._name; }
 }
 
 class DelayEvent extends BaseEvent {
     //delay: Number
     constructor(delay) {
         super(EventType.Delay);
-        this.delay = delay;
+        this._delay = delay;
     }
 
     static delay(delay) {
         return new DelayEvent(delay);
     }
 
-    get delay() { return this.delay; }
+    get delay() { return this._delay; }
 }
 
 class TextBarController {    
@@ -304,7 +386,6 @@ const imageHideType = {
 
 class CanvasController {
     constructor() {
-        this.objects = [];
     }
 
     initCnavas() {
@@ -327,53 +408,50 @@ class CanvasController {
     }
 }
 
-class BranchManager{
+class BranchManager {
     constructor() {
-        this.branches = [];
+        this._branches = [];
     }
     
     //branch: Branch
     addBranch(branch) {
-        this.branches.push(branch);
+        this._branches.push(branch);
     }
 
     //branchName: String, return: Branch
     removeBranch(branchName) {
-        return this.branches.find(branch => branch.name == branchName);
+        return this._branches.find(branch => branch.name == branchName);
     }
 
     //branchName: String, return: Branch
     getBranch(branchName) {
-        return this.branches.find(branch => branch.name == branchName);
+        return this._branches.find(branch => branch.name == branchName);
     }
 }
 
 class Branch {
     //branchName: String, endingText: String
     constructor(branchName, endingText) {
-        this.branchName = branchName;
-        this.endingText = endingText;
+        this._branchName = branchName;
+        this._endingText = endingText;
         //pages: Page[]
-        this.pages = [];
+        this._pages = [];
     }
 
     //baseEvent: Page
     addPage(baseEvent) {
-        this.pages.push(baseEvent);
+        this._pages.push(baseEvent);
     }
 
     //return: Page
     removePage() {
-        return this.pages.pop();
+        return this._pages.pop();
     }
 
     //return: String
-    get branchName() { return this.branchName; }
+    get branchName() { return this._branchName; }
     //return: String
-    get endingText() { return this.endingText; }
+    get endingText() { return this._endingText; }
     //return: Page[]
-    get pages() { return this.pages; }
-
-    //Rootbranch: Branch
-    static RootBranch = new Branch("root", "END");
+    get pages() { return this._pages; }
 }
