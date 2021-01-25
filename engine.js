@@ -280,7 +280,7 @@ class CanvasEvent extends BaseEvent {
 
     //return: CanvasEvent
     static changeBackGround() { 
-
+        
     }
 
     //return: CanvasEvent
