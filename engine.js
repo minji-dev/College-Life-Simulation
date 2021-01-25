@@ -1,5 +1,3 @@
-import React from 'react';
-
 class TextGame {
     constructor() {
         this._textBarController = new TextBarController();
@@ -21,11 +19,13 @@ class TextGame {
     //branchName: String, return: Branch
     removeBranch(branchName) {
         return this._branchManager.removeBranch(branchName);
-    }
+    }   
 
-    start() {
+    //entryBranch: Branch
+    start(entryBranch) {
         this._textBarController.initTextBar();
-        this._canvasController.initCnavas();
+        this._canvasController.initCanvas();
+        this._currentBranch = entryBranch;
     }
 
     nextPage() {
@@ -33,12 +33,13 @@ class TextGame {
             b.eventType === EventType.TextBar && b.textBarEventType === TextbarEventType.Branch
         }))
             return;
-        
+
+        if (currentBranch.pages.length < this._currentPageIndex)
+            return;
+
         if (_delaytimer !== null)
             clearTimeout(this._delaytimer);
         
-        let branch = this._currentBranch;
-
         //currentPage: Page
         let currentPage = this._currentBranch.pages[currentpageindex];
         //currentEvents: BaseEvent[]
@@ -47,7 +48,7 @@ class TextGame {
         this.eventProcess(currentEvents);
 
         currentPageIndex += 1;            
-        if (currentBranch.pages.length == this._currentPageIndex) {
+        if (currentBranch.pages.length <= this._currentPageIndex) {
             this._canvasController.endScreen(_currentBranch.endingText);
         } 
     }
@@ -85,6 +86,7 @@ class TextGame {
 
             case TextBarEventType.Branch:
                 let branchResult = textBarController.showBranch(textBarEvent.eventData.filter(function(x) { return x.name }));
+                
                 let jumpBranchName = textBarEvent.eventData.find(function(item) { return item === branchResult });
                 if (jumpBranchName === null) {
                     this._canvasController.endScreen("END (Error)");
@@ -110,17 +112,33 @@ class TextGame {
     canvasProcess(canvasEvent) {
         switch (canvasEvent.canvasEventType) {
             case CanvasEventType.AddImage:
+                this._canvasController.imageShow(
+                    canvasEvent._eventData.name, 
+                    canvasEvent._eventData.src, 
+                    canvasEvent._eventData.positon, 
+                    canvasEvent._eventData.transition
+                );
                 break;
 
             case CanvasEventType.ChangeBackGround:
-
+                this._canvasController.setBackground(
+                    canvasEvent._eventData.src
+                );
                 break;
+
             case CanvasEventType.DrawText:
-
+                this._canvasController.drawtext(
+                    canvasEvent._eventData.text
+                );
                 break;
+
             case CanvasEventType.RemoveObject:
-
+                this._canvasController.imageRemove(
+                    canvasEvent._eventData.name, 
+                    canvasEvent._eventData.transition
+                );
                 break;
+
             default:
                 break;
         }
@@ -179,14 +197,28 @@ class Page {
         this._baseEvents = [];
     }
 
-    //baseEvent: BaseEvent
+    //baseEvent: BaseEvent, return: Page
     addEvent(baseEvent) {
         this._baseEvents.push(baseEvent);
+        return this;
+    }
+    
+    //name: String, text: String, return: Page
+    addTextEvent(name, text) {
+        this.addEvent(TextBarEvent.text(name, text));
+        return this;
     }
 
-    //baseEvent: BaseEvent
+    //src: String, return: Branch
+    addBackbroundEvent(src){
+        this.addEvent(CanvasEvent.changeBackGround(src));
+        return this;
+    }
+
+    //baseEvent: BaseEvent, return: Page
     removeEvent(baseEvent) {
         this._baseEvents.push(baseEvent);
+        return this;
     }
 
     get baseEvents() { return this._baseEvents; }
@@ -264,30 +296,42 @@ class CanvasEvent extends BaseEvent {
     }
 
     //return: CanvasEvent
-    static addImage() { 
-        return new CanvasEvent(CanvasEventType.AddImage, new ImagePair(name, src, position, transition));
+    static addImage(name, src, position, transition) { 
+        return new CanvasEvent(
+            CanvasEventType.AddImage, 
+            new ImagePair(name, src, position, transition)
+        );
     }
 
     //return: CanvasEvent
-    static changeBackGround() { 
-
+    static changeBackGround(src) { 
+        return new CanvasEvent(
+            CanvasEventType.ChangeBackGround, 
+            new BackGroundPair(src)
+        );
     }
 
     //return: CanvasEvent
-    static drawText() { 
-
+    static drawText(text) { 
+        return new CanvasEvent(
+            CanvasEventType.DrawText, 
+            new DrawTextPair(text)
+        );
     }
 
     //return: CanvasEvent
-    static removeObject() { 
-
+    static removeObject(name, transition) { 
+        return new CanvasEvent(
+            CanvasEventType.RemoveObject,
+            new RemoveObjectPair(name, transition)
+        );
     }
 
     get canvasEventType() { return this._canvasEventType; }
 }
 
 class ImagePair {
-    //name: String, src: String, position: ???, transition: String
+    //name: String, src: String, position: modelPosition transition: String
     constructor(name, src, positon, transition) {
         this._name = name;
         this._src = src;
@@ -311,24 +355,22 @@ class BackGroundPair {
 }
 
 class DrawTextPair {
-    //name: String, text: String, positon: ???
-    constructor(name, text, positon) {
-        this._name = name;
+    //text: String
+    constructor(text) {
         this._text = text;
-        this._positon = positon;
     }
 
-    get name() { return this._name; }
     get text() { return this._text; }
-    get positon() { return this._positon; }
 }
 
 class RemoveObjectPair {
     //name: String
-    constructor(name) {
+    constructor(name, transition) {
         this._name = name;
+        this._transition = transition;
     }
     get name() { return this._name; }
+    get transition() { return this._transition; }
 }
 
 class DelayEvent extends BaseEvent {
@@ -345,7 +387,7 @@ class DelayEvent extends BaseEvent {
     get delay() { return this._delay; }
 }
 
-class TextBarController {    
+class TextBarController {
     constructor() {
     }
 
@@ -354,12 +396,12 @@ class TextBarController {
     }
 
     //name: String, text: String
-    setText(name, text) {
-
+    setText(name, text) { 
+        
     }
 
-    //options: String, return: String
-    showBranch(options) {
+    //options: String[], return: String
+    showBranch(options) { 
         
     }
 }
@@ -376,27 +418,53 @@ const imageHideType = {
     FadeOut: 1
 }
 
+//modelPosition: Number
+const modelPosition = {
+    center: 0,
+    left: 1,
+    right: 2
+}
+
 class CanvasController {
     constructor() {
     }
 
-    initCnavas() {
-
-    }
-
-    //name: String, src: String, positon: ???, transition: imageShowType
-    imageShow(name, src, positon, transition) { 
-
+    //name: String, src: String, positon: modelPosition transition: imageShowType
+    imageShow(name, src, positon, transition) { // 
+        if(position === left) const img = getElementById("left");
+        if(position === center) const img = getElementById("center");
+        if(position === right) const img = getElementById("right");
+        img.src = src;
+        img.class = name;
     }
     
     //name: String, transition: imageHideType
     imageRemove(name, transition) { 
+        //name으로 이미지를 지울수 있음
+        const img = document.getElementsByClassName(name)[0];
+        img.class = "";
+        img.src = "";
+    }
 
+    //src: String
+    setBackground(src) {
+        const backgroundImg = document.getElementById("backgroundImg");
+        backgroundImg.src = "images/" + src + ".jpeg";
+    }
+
+    //text: String
+    drawtext(text){ //null 넣으면 지워짐
+        const chatBox = document.getElementById("chatBox");
+        if(text === null){
+            chatBox.innerHTML = "";
+            return;
+        }
+        chatBox.innerHTML = text;
     }
 
     //text: String
     endScreen(text) {
-        
+        //엔딩화면은 그냥 텍스트 띄우는 함수로 따로 만듬
     }
 }
 
@@ -430,9 +498,32 @@ class Branch {
         this._pages = [];
     }
 
-    //baseEvent: Page
-    addPage(baseEvent) {
-        this._pages.push(baseEvent);
+    //page: Page, return: Branch
+    addPage(page) {
+        this._pages.push(baseEvpageent);
+        return this;
+    }
+
+    //name: String, text: String, return: Branch
+    addTextPage(name, text) {
+        this.addPage(new Page().addEvent(TextBarEvent.text(name, text)));
+        return this;
+    }
+
+    //src: String, return: Branch
+    addBackbroundPage(src){
+        this.addPage(new Page().addEvent(CanvasEvent.changeBackGround(src)));
+        return this;
+    }
+
+    //baseEvents: BaseEvent[]
+    addEventsAsPage(baseEvents) {
+        let page = new Page();
+        baseEvents.forEach(element => {
+            page.addEvent(element);
+        });
+        this.addPage(page);
+        return this;
     }
 
     //return: Page

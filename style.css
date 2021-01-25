@@ -1,16 +1,73 @@
 body{
-    overflow-x:hidden;
-    overflow-y:hidden;
+    /* overflow-x:hidden;
+    overflow-y:hidden; */
     margin: 0;
-
 }
 
 #canvasDiv{
     z-index: 1;
-}
-
-canvas{
     width: 100vw;
-    height: 56.25vw;    
+    height: 56.25vw;
+    position: relative;
 }
 
+#leftImgDiv{
+    z-index: 2;
+    width: 20vw;
+    top: 17vw;
+    left: 5vw;
+    position: absolute;
+    text-align: center;
+}
+
+#centerImgDiv{
+    z-index: 2;
+    width: 20vw;
+    top: 17vw;
+    left: 40vw;
+    position: absolute;
+    text-align: center;
+}
+
+#rightImgDiv{
+    z-index: 2;
+    width: 20vw;
+    top: 17vw;
+    right: 5vw;
+    position: absolute;
+    text-align: center;
+}
+
+#backgroundImg{
+    width: 100vw;
+    height: 56.25vw;
+}
+
+#centerImg, #leftImg, #rightImg{
+    width: 20vw;
+}
+
+#nameBox{
+    width: 7vw;
+    height: 3vw;
+    top:34.25vw;
+
+    position: absolute;
+    z-index: 4;
+    background-color: #000;
+    color: #fff;
+}
+
+#chatBox{
+    width: 94vw;
+    height: 14vw;
+    top: 36.25vw;
+
+    position: absolute;
+    z-index: 3;
+    background-color: #000;
+    color: #fff;
+    opacity: 0.5;
+
+    padding: 3vw;
+}

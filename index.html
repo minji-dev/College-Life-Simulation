@@ -4,15 +4,171 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="app.js"></script>
     <link rel= "stylesheet" type="text/css" href="style.css">
     <title>나연누나와밥먹는법</title>
+    <script src="engine.js"></script>
+    <script>
+        let textGame = new TextGame();
+        let branch_1 = new Branch("branch_1", null)
+            .addEventsAsPage(//두 대사는 자동으로 넘어가며 두 대사간의 딜레이는 2초입니다.
+                [
+                    CanvasEvent.changeBackGround("images/test.jpeg"),
+                    TextBarEvent.text(null, "[집 안]"),
+                    DelayEvent.delay(2000),
+                    TextBarEvent.text(null, "(이상하게 생각해도 어쩔 수 없어, 반했으니까~)")
+                ]
+            )
+            .addTextPage("동희", "으으음...")
+            .addTextPage(null, "오늘도 감미로운 나연눈나의 목소리가 나를 깨웠다.")
+            .addTextPage(null, "따뜻한 한낮의 햇살까지 비쳐 기분이 좋게 하루를 시작할 수 있을 듯 한 기분이 든다.")
+            .addTextPage("...", "잠깐... 뭔가 잊은게 있는 것 같은데..?")
+            .addTextPage("동희", "맞다! 오늘 팬싸인회 날이지!")
+            .addTextPage("...", "시계를 보니 시간은 벌써 팬싸인회 10분 전. 바로 준비해둔 가방과 토스트를 챙겨 밖을 향해 달려나간다.")
+            .addEventsAsPage(
+                [
+                    CanvasEvent.changeBackGround("images/test.jpeg"),
+                    TextBarEvent.text(null, "[집 앞]")
+                ]
+            )
+            .addTextPage("동희", "지고쿠 지고쿠! 이대로라면 나연눈나와의 팬싸인회에 늦어버렷!!")
+            .addTextPage("...", "나연눈나를 만나기 위해서라면 토스트를 물고 전력질주하는 것 쯤이야..!")
+            .addTextPage("...", "그 순간, 골목길에서 달려오는 트럭이 보였다. 그리고 그 트럭에 타고 있는건...")
+            .addTextPage(null, "[달려오는 트럭과 거기에 탄 나연]")
+            .addTextPage("동희", "나연눈나?")
+            .addTextPage(null, "(-끼이익)")
+            .addTextPage("...", "아아ㅡ 이제 끝인가. 나연눈나랑 같이 밥.. 먹어보고.. 싶었는데...")
+            .addTextPage("...", "새하얀 빛이 내 몸을 감쌌다. 시간이 얼마나 지났을까.")
+            .addTextPage("느껴지지 않는 고통에 뜬 눈에 비친건.. 내 방 침대다.")
+            .addTextPage("동희", "...방금 그건 뭐였지? 꿈이라기엔 너무 생생했는데...")
+            .addTextPage("...", "분명히 팬싸인회 날이라고 적혀있었을 달력은 적힌 것 없이 깨끗했다. ")
+            .addTextPage("동희", "후... 모르겠다. 빨리 학교나 가야지, 진짜 지각하겠어")
+            .addTextPage(null, "---")
+            .addEventsAsPage(
+                [
+                    CanvasEvent.changeBackGround("images/test.jpeg"),
+                    TextBarEvent.text(null, "[학교]")
+                ]
+            )
+            .addTextPage("...", "저 아이는...? 분명히 빈 자리였을 자리에 어쩐지 익숙한 사람이 있는것 같다.")
+            .addTextPage("친구1", "야, 뭘 그렇게 뚫어지게 쳐다봐? 무슨 일 있어?")
+            .addTextPage("동희", "아.. 아무것도 아냐.")
+            .addTextPage("...", "착각이였나... 오늘 좀 이상하네, 자꾸 이상한 기분이 들고, 스트레스 떄문인가")
+            .addEventsAsPage(
+                [
+                    CanvasEvent.changeBackGround("images/test.jpeg"),
+                    TextBarEvent.text(null, "[학교(방과후)]")
+                ]
+            )
+            .addTextPage("선생님", "자 오늘 청소당번은.. 어디보자...")
+            .addTextPage("선생님", "임나연, 김동희!")
+            .addTextPage("...", "임나연..? 우리반에 나연누나와 같은 이름은 없었을 텐데...")
+            .addTextPage(null, "그렇게 생각하던 중, 창가에 앉아 창밖을 바라보고 있는 한 여자아이가 눈에 보였다.")
+            .addTextPage(null, "바람이 불자 커튼이 날리고, 노을빛이 그녀의 머릿결을 황금빛으로 물들였다.")
+            .addTextPage("???", "...")
+            .addTextPage(null, "나는 잠시 넋을 잃고 그녀를 쳐다봤다. 나연눈나를 본 이후로 이런 기분을 느낀건 처음, 너무나도 아름다운 모습이였다.")
+            .addTextPage("동희", "저기...")
+            .addTextPage("???", "응?")
+            .addTextPage("...", "돌아본 그녀의 모습은 나에겐 너무나도 익숙한, 절대 잘못볼리 없는 나연누나의 모습 그대로였다.")
+            .addTextPage("동희", "나연...눈나...?")
+            .addTextPage("나연", "누나라니. 갑자기 무슨 소리야?")
+            .addTextPage("...", "세계가... 바뀌었다?")
+            .addTextPage("나연", "왜 그래? 어디 아파?")
+            .addTextPage("동희", "아, 아무것도 아니야!")
+            .addTextPage("...", "나연누나가 어째서 우리 반에? 대체 무슨일이지?!")
+            .addEventsAsPage(
+                [
+                    CanvasEvent.changeBackGround("images/test.jpeg"),
+                    TextBarEvent.text(null, "놀란 표정을 숨길 수 없었던 나는 바로 학교를 뛰쳐나갔다.")
+                ]
+            )
+            .addTextPage("---")
+            .addEventsAsPage(
+                [
+                    CanvasEvent.changeBackGround("images/test.jpeg"),
+                    TextBarEvent.text(null, "[집 앞]")
+                ]
+            )
+            .addTextPage("동희", "헉...헉...")
+            .addTextPage(null, "거친 숨을 고르고서, 생각을 정리하기로 했다.")
+            .addTextPage("...", "그러니까... 정리하자면, 나는 트럭에 치여서 평행세계로 왔고, 여기서는 나연눈나가 나랑 동급생에 클래스메이트인건가...")
+            .addTextPage("...", "이건 인생에 둘도 없을 기회야! 지금이라면 나연누나와 뭐든 할 수 있어!")
+            .addTextPage("동희", "바뀌어버린 세상이라면, 디시 나연갤 호감고닉 『나연누나밥먹나연』 으로서,")
+            .addTextPage("...", "나연누나와 『밥』을 먹고야 말겠어!")
+            .addTextPage(null, "(카톡!)")
+            .addTextPage(null, "굳은 결심을 다지던 중, 카톡 소리가 내 집중을 깨뜨렸다.")
+            .addEventsAsPage(
+                [
+                    CanvasEvent.addImage("phone", "images/test.jpeg", modelPosition.center, imageShowType.FadeIn),
+                    TextBarEvent.text(null, "[휴대폰 화면]")
+                ]
+            )
+            .addEventsAsPage(
+                [
+                    CanvasEvent.addImage("phone", "images/test.jpeg", modelPosition.center, imageShowType.FadeIn),
+                    CanvasEvent.removeObject("phone", imageHideType.Disappear),
+                    TextBarEvent.text("나연", "- 너 청소 째고 도망가면 어떡해!")
+                ]
+            )
+            .addTextPage(null, "남녀 칠세 부동석이라 하였던가. 여자와 말 한번 나누어 본 적 없는 나에게 거대한 시련이 다가왔다.")
+            .addEventsAsPage(
+                [
+                    
+                    TextBarEvent.text("...", "나연누나에게 좋은 인상을 사야 하는데, 대체 무슨 말을 해야 하지?"),
+                    TextBarEvent.branch([
+                        new BranchPair("죄송합니다!", "branch_1_1"),
+                        new BranchPair("밥 한번 사줄게", "branch_1_2")
+                    ])
+                ]
+            );
+        textGame.addBranch(branch_1);
+
+
+        let branch_1_1 = new Branch("branch_1_1", null)
+            .addTextPage("동희", "-죄송합니다 죽을 죄를 지었습니다!"),
+            .addTextPage("나연", "- 잘못한건 아는구나? 그럼 어떻게 벌을 줄까..."),
+            .addTextPage("나연", "- 아 그래! 너가 밥 한번 사주면 이번엔 눈감아줄게"),
+            .addTextPage("동희", "- 넵! 당연히 사야죠. 암요. 같이 드셔주셔서 제가 감사합니다.");
+        textGame.addBranch(branch_1_1);
+
+
+        let branch_1_2 = new Branch("branch_1_2", null);
+        // }
+
+// 2 (밥 한번 사줄게) {
+
+// 동희 : -미안해 바쁜 일이 있어서.. 내가 나중에 밥이라도 한번 살게
+
+// 나연 : -그래, 처음이니까 이번 한번만 밥 한끼로 봐줄게.
+
+// 나연 : -대신 다음번엔 밥 한끼로 안 끝날거야! (삐진 이모티콘)
+
+// }
+
+// 동희 : "휴우..."
+
+// 독백 : 다행히 위기를 넘기고, 게다가 같이 밥 먹을 기회까지 생겼다.
+
+//  위기를 기회로, 인생사 새옹지마,... 역시 옛말 틀린거 하나 없다!
+        textGame.addBranch(branch_1_2);
+
+
+        textGame.start(branch_1);
+        textGame.nextPage();
+        //여기까지 브렌치 테스트 코드입니다.
+    </script>
 </head>
-<body onload="start();">
-    <div id="canvasDiv" position="relative">
-        <canvas id="canvas" width="1920" height="1080" position="relative" overflow="visible"></canvas>
+<body onload="start();" onClick="textGame.nextPage()">
+    <div id="canvasDiv">
+        <img id="backgroundImg" src="images/test.jpeg">
+        <div id="leftImgDiv"><img id="leftImg" src="images/main.jpeg"></div>
+        <div id="centerImgDiv"><img id="centerImg" src="images/main.jpeg"></div>
+        <div id="rightImgDiv"><img id="rightImg" src="images/main.jpeg"></div>
+
+        <div id="nameBox">임나연</div>
+        <div id="chatBox">
+            <button id="button1"></button>
+            <button id="button2"></button>
+        </div>
     </div>
-    <button id="button" onclick="interaction('0')">button</button>
-    <button id="button" onclick="interaction('1')">button</button>
 </body>
 </html>
