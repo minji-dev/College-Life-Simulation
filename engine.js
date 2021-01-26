@@ -1,12 +1,13 @@
 class TextGame {
     constructor() {
-        this._textBarController = new TextBarController();
+        this._textBarController = new TextBarController(this.branchProcess);
         this._canvasController = new CanvasController();
         this._soundController = new SoundController();
         this._branchManager = new BranchManager();
         this._currentBranch = new Branch("Root", "END");
         this._currentPageIndex = 0;
         this._delaytimer = null;
+        this._isBranching = false;
     }
     
     get textBarController() { return this._textBarController; }
@@ -17,12 +18,17 @@ class TextGame {
         this._branchManager.addBranch(branch);
     }
 
-    //branchName: String, return: Branch
-    removeBranch(branchName) {
-        return this._branchManager.removeBranch(branchName);
+    setTextBarElement(chatBox, nameBox) {
+        this._textBarController.init(chatBox, nameBox);
     }
 
-    setEle
+    setCanvasElement(canvasImg, leftImg, centerImg, rightImg) {
+        this._canvasController.init(canvasImg, leftImg, centerImg, rightImg);
+    }
+
+    setSoundElement(backgroundSound, activeSound) {
+        this._soundController.init(backgroundSound, activeSound);
+    }
 
     //entryBranch: Branch
     start(entryBranch) {
@@ -31,12 +37,20 @@ class TextGame {
     }
 
     nextPage() {
+        if (this._currentBranch.pages.length <= this._currentPageIndex)
+            return;
+
         if (this._currentBranch.pages[this._currentPageIndex].baseEvents.find(b => {
             b.eventType === EventType.TextBar && b.textBarEventType === TextbarEventType.Branch
         }))
             return;
 
-        if (this._currentBranch.pages.length < this._currentPageIndex)
+        if (this._currentBranch.pages[this._currentPageIndex].baseEvents.find(b => {
+            b.eventType === EventType.TextBar && b.textBarEventType === TextbarEventType.Branch
+        }))
+            return;
+
+        if ( this._isBranching === true)
             return;
 
         if (this._delaytimer !== null)
@@ -52,7 +66,7 @@ class TextGame {
         this._currentPageIndex += 1;            
         if (this._currentBranch.pages.length <= this._currentPageIndex) {
             if(this._currentBranch._end === null)
-                this._canvasController.endScreen("END (Error)"); 
+                this._canvasController.endScreen("END (Error)");
             else {
                 this._currentBranch = this._currentBranch._end;
                 this._currentPageIndex = 0;
@@ -65,7 +79,7 @@ class TextGame {
         //item: BaseEvent 
         for (let index = 0; index < baseEvent.length; index++) {
             const item = baseEvent[index];
-            switch (item) {
+            switch (item.eventType) {
                 case EventType.TextBar:
                     this.textBarProcess(item);
                     break;
@@ -79,7 +93,7 @@ class TextGame {
                     break;
 
                 case EventType.Delay:
-                    this.delayProcess(item, index);
+                    this.delayProcess(item, baseEvent, index);
                     return;
             
                 default:
@@ -91,27 +105,15 @@ class TextGame {
     //textBarEvent: TextBarEvent
     textBarProcess(textBarEvent) {
         switch (textBarEvent.textBarEventType) {
-            case TextBarEventType.Text:
-                textBarController.setText(textBarEvent.eventData.name, textBarEvent.eventData.text);
+            case TextbarEventType.Text:
+                this._textBarController.setText(textBarEvent.eventData.name, textBarEvent.eventData.text);
                 break;
 
-            case TextBarEventType.Branch:
-                let branchResult = textBarController.showBranch(textBarEvent.eventData.filter(function(x) { return x.name }));
-                
-                let jumpBranchName = textBarEvent.eventData.find(function(item) { return item === branchResult });
-                if (jumpBranchName === null) {
-                    this._canvasController.endScreen("END (Error)");
-                    return;
-                } else {
-                    let jumpBranch = this._branchManager.getBranch(jumpBranchName);
-                    if (jumpBranchName === null) {
-                        this._canvasController.endScreen("END (Error)");
-                        return;
-                    } else {
-                        this._currentBranch = jumpBranch;
-                        this._currentPageIndex = 0;
-                    }
-                }
+            case TextbarEventType.Branch:
+                this._isBranching = true;
+                let selectedData = [];
+                textBarEvent.eventData.forEach((item) => selectedData.push(item.name));
+                this._textBarController.showBranch(selectedData, this);
                 break;
         
             default:
@@ -174,12 +176,12 @@ class TextGame {
         }
     }
     
-    //delayEvent: DelayEvent, index: Number
-    delayProcess(delayEvent, index) {
+    //delayEvent: DelayEvent, baseEvents: BaseEvent[], index: Number
+    delayProcess(delayEvent, baseEvents, index) {
         this._delaytimer = setTimeout(() => {
-            for (let innerIndex = index + 1; innerIndex < baseEvent.length; innerIndex++) {
-                const item = array[innerIndex];
-                switch (item) {
+            for (let innerIndex = index + 1; innerIndex < baseEvents.length; innerIndex++) {
+                const item = baseEvents[innerIndex];
+                switch (item.eventType) {
                     case EventType.TextBar:
                         this.textBarProcess(item);
                         break;
@@ -187,9 +189,13 @@ class TextGame {
                     case EventType.Canvas:
                         this.canvasProcess(item);
                         break;
-    
+
+                    case EventType.Sound:
+                        this.soundProcess(item);
+                        break;
+
                     case EventType.Delay:
-                        this.delayProcess(item, innerIndex);
+                        this.delayProcess(item, baseEvents, innerIndex);
                         return;
                 
                     default:
@@ -197,6 +203,20 @@ class TextGame {
                 }
             }
         }, delayEvent.delay);
+    }
+
+    //branchName: String
+    branchProcess(branchName, o) {
+        let jumpBranch = o._branchManager.getBranch(branchName);
+        if (branchName === null) {
+            o._canvasController.endScreen("END (Error)");
+            o._isBranching = false;
+            return;
+        } else {
+            o._currentBranch = jumpBranch;
+            o._currentPageIndex = 0;
+        }
+        o._isBranching = false;
     }
 }
 
@@ -289,6 +309,9 @@ class TextBarEvent extends BaseEvent {
 
     //return: TextbarEventType
     get textBarEventType() { return this._textBarEventType; }
+
+    //return: any
+    get eventData() { return this._eventData; }
 }
 
 class TextPair {
@@ -368,6 +391,9 @@ class CanvasEvent extends BaseEvent {
     }
 
     get canvasEventType() { return this._canvasEventType; }
+
+    //return: any
+    get eventData() { return this._eventData; }
 }
 
 class ImagePair {
@@ -458,13 +484,14 @@ class DelayEvent extends BaseEvent {
 }
 
 class TextBarController {
-    constructor() {
+    constructor(callback) {
         this._chatBox = null;
         this._nameBox = null;
+        this._callback = callback;
     }
 
     //chatBox: HTMLElement, nameBox: HTMLElement
-    initTextBar(chatBox, nameBox) {
+    init(chatBox, nameBox) {
         this._chatBox = chatBox;
         this._nameBox = nameBox;
     }
@@ -484,11 +511,12 @@ class TextBarController {
         
     }
 
-    //options: String[], return: String
-    showBranch(options) { 
+    //options: String[], o: any, return: String
+    showBranch(options, o) { 
         let button = [];
         let label = [];
         let text = [];
+        let result;
         for(let i = 0; i < options.length; i++){
             label[i] = document.createElement('label');
             button[i] = document.createElement('button');
@@ -499,15 +527,17 @@ class TextBarController {
             label[i].appendChild(document.createElement('br'));
             label[i].appendChild(document.createElement('br'));
             text[i].innerHTML = "→" + options[i];
-            
-            eventlistener(i).then(function(resolvedData) {
-                console.log(resolvedData);
-              });
+
+            eventlistener(i).then((resolvedData) => {
+                this._callback(resolvedData, o);
+            });
         }
+        let tmpThis = this;
         function eventlistener(i) {
             return new Promise(function(resolve, reject) {
                 button[i].addEventListener('click', function(event) {
                     resolve(options[i]);
+                    tmpThis.clearTextBar();
                 }, false);
             })
         }
@@ -550,7 +580,7 @@ class CanvasController {
     }
 
     //canvasImg: HTMLElement, leftImg: HTMLElement, centerImg: HTMLElement, rightImg: HTMLElement
-    initCanvas(canvasImg, leftImg, centerImg, rightImg) {
+    init(canvasImg, leftImg, centerImg, rightImg) {
         this._canvasImg = canvasImg;
         this._leftImg = leftImg;
         this._centerImg = centerImg;
@@ -572,7 +602,7 @@ class CanvasController {
         else if(position === 2) {
             img = this._rightImg;
         }
-        img.src = "images/characters/" + src + ".jpeg";
+        img.src = src;
         img.className = name;
         if(transition === 1){
             
@@ -607,7 +637,7 @@ class CanvasController {
 
     //src: String
     setBackground(src) {
-        this._canvasImg.src = "images/backgrounds/" + src + ".jpeg";
+        this._canvasImg.src = src;
     }
 
     //text: String
@@ -633,16 +663,24 @@ class BranchManager {
     //branch: Branch
     addBranch(branch) {
         this._branches.push(branch);
-    }
-
-    //branchName: String, return: Branch
-    removeBranch(branchName) {
-        return this._branches.find(branch => branch.name == branchName);
+        console.log(this._branches);
     }
 
     //branchName: String, return: Branch
     getBranch(branchName) {
-        return this._branches.find(branch => branch.name == branchName);
+        let find = null;
+        
+        console.log(this._branches);
+        for (let index = 0; index < this._branches.length; index++) {
+            const element = this._branches[index];
+            console.log(element);
+            if (element.branchName === branchName) {
+                find = element;
+                break;
+            }
+        }
+        //return this._branches.find(branch => branch.branchName === branchName);
+        return find;
     }
 }
 
@@ -707,7 +745,8 @@ class SoundController {
         this._activeSound = null;
     }
 
-    initSound(backgroundSound, activeSound) {
+    //backgroundSound: HTMLElement, activeSound: HTMLElement
+    init(backgroundSound, activeSound) {
         this._backgroundSound = backgroundSound;
         this._activeSound = activeSound;
     }

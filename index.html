@@ -15,11 +15,11 @@
                 CanvasEvent.changeBackGround("images/backgrounds/home.jpg"),
                 TextBarEvent.text(null, "[집 안]"),
                 DelayEvent.delay(2000),
-                SoundEvent.sfx("sound/sfx/hartshakeralerm.mp3"),
+                SoundEvent.sfx("audio/HeartShaker.mp3"),
                 TextBarEvent.text(null, "(이상하게 생각해도 어쩔 수 없어, 반했으니까~)")
             ])            
             .addEventsAsPage([
-                SoundEvent.background("sound/background/test.mp3"),
+                SoundEvent.background("audio/background/Ohayou.mp3"),
                 TextBarEvent.text("동희", "으으음...")
             ])
             .addTextPage(null, "오늘도 감미로운 나연눈나의 목소리가 나를 깨웠다.")
@@ -27,41 +27,62 @@
             .addTextPage("...", "잠깐... 뭔가 잊은게 있는 것 같은데..?")
             .addTextPage("동희", "맞다! 오늘 팬싸인회 날이지!")
             .addTextPage("...", "시계를 보니 시간은 벌써 팬싸인회 10분 전. 바로 준비해둔 가방과 토스트를 챙겨 밖을 향해 달려나간다.")
-            .addEventsAsPage([
+            .addEventsAsPage([/*
                 SoundEvent.stopbackground(),
-                SoundEvent.background("sound/background/test2.mp3"),
+                SoundEvent.background("audio/background/Ohayou.mp3"),*/
                 CanvasEvent.changeBackGround("images/backgrounds/street.jpg"),
+                DelayEvent.delay(500),
                 TextBarEvent.text(null, "[집 앞]")
             ])
             .addTextPage("동희", "지고쿠 지고쿠! 이대로라면 나연눈나와의 팬싸인회에 늦어버렷!!")
             .addTextPage("...", "나연눈나를 만나기 위해서라면 토스트를 물고 전력질주하는 것 쯤이야..!")
             .addTextPage("...", "그 순간, 골목길에서 달려오는 트럭이 보였다. 그리고 그 트럭에 타고 있는건...")
-            .addTextPage(null, "[달려오는 트럭과 거기에 탄 나연]")
             .addEventsAsPage([
+                SoundEvent.stopbackground(),
+                SoundEvent.sfx("audio/Brake.mp3"),
                 CanvasEvent.changeBackGround("images/backgrounds/NayeonTruck.png"),
+                DelayEvent.delay(500),
+                TextBarEvent.text(null, "[달려오는 트럭과 거기에 탄 나연]")
             ])
             .addTextPage("동희", "나연눈나?")
-            .addTextPage(null, "(-끼이익)")
+            .addEventsAsPage([
+                CanvasEvent.changeBackGround("images/backgrounds/street.jpg"),
+                DelayEvent.delay(500),
+                TextBarEvent.text(null, "(-끼이익)")
+            ])
             .addTextPage("...", "아아ㅡ 이제 끝인가. 나연눈나랑 같이 밥.. 먹어보고.. 싶었는데...")
             .addTextPage("...", "새하얀 빛이 내 몸을 감쌌다. 시간이 얼마나 지났을까.")
             .addEventsAsPage([
                 CanvasEvent.changeBackGround("images/backgrounds/home.jpg"),
             ])
-            .addTextPage("느껴지지 않는 고통에 뜬 눈에 비친건.. 내 방 침대다.")
+            .addEventsAsPage([
+                TextBarEvent.text("...", "느껴지지 않는 고통에 뜬 눈에 비친건.. 내 방 침대다."),
+                SoundEvent.sfx("audio/Bird.mp3")
+            ])
             .addTextPage("동희", "...방금 그건 뭐였지? 꿈이라기엔 너무 생생했는데...")
             .addTextPage("...", "분명히 팬싸인회 날이라고 적혀있었을 달력은 적힌 것 없이 깨끗했다. ")
             .addTextPage("동희", "후... 모르겠다. 빨리 학교나 가야지, 진짜 지각하겠어")
             .addTextPage(null, "---")
             .addEventsAsPage([
+                SoundEvent.background("audio/background/Ohayou.mp3"),
                 CanvasEvent.changeBackGround("images/backgrounds/school.jpg"),
+                DelayEvent.delay(500),
                 TextBarEvent.text(null, "[학교]")
             ])
             .addTextPage("...", "저 아이는...? 분명히 빈 자리였을 자리에 어쩐지 익숙한 사람이 있는것 같다.")
+            .addEventsAsPage([
+                CanvasEvent.addImage("shadow", "images/characters/Shadow.png", modelPosition.center, imageShowType.FadeIn),
+                TextBarEvent.text("친구1", "야, 뭘 그렇게 뚫어지게 쳐다봐? 무슨 일 있어?")
+            ])
             .addTextPage("친구1", "야, 뭘 그렇게 뚫어지게 쳐다봐? 무슨 일 있어?")
             .addTextPage("동희", "아.. 아무것도 아냐.")
             .addTextPage("...", "착각이였나... 오늘 좀 이상하네, 자꾸 이상한 기분이 들고, 스트레스 떄문인가")
             .addEventsAsPage([
+                CanvasEvent.removeObject("shadow", imageHideType.Disappear),
                 CanvasEvent.changeBackGround("images/backgrounds/school.jpg"),
+                DelayEvent.delay(500),
+                SoundEvent.stopbackground(),
+                SoundEvent.background("audio/background/Confession.mp3"),
                 TextBarEvent.text(null, "[학교(방과후)]")
             ])
             .addTextPage("선생님", "자 오늘 청소당번은.. 어디보자...")
@@ -88,11 +109,16 @@
             ])
             .addEventsAsPage([
                 CanvasEvent.changeBackGround("images/backgrounds/street.jpg"),
+                DelayEvent.delay(500),
+                SoundEvent.sfx("audio/Walk.mp3"),
                 TextBarEvent.text(null, "놀란 표정을 숨길 수 없었던 나는 바로 학교를 뛰쳐나갔다.")
             ])
-            .addTextPage("---")
+            .addTextPage(null, "---")
             .addEventsAsPage([
                 CanvasEvent.changeBackGround("images/backgrounds/home.jpg"),
+                DelayEvent.delay(500),
+                SoundEvent.stopbackground(),
+                SoundEvent.background("audio/background/Maintheme.mp3"),
                 TextBarEvent.text(null, "[집]")
             ])
             .addTextPage("동희", "헉...헉...")
@@ -101,15 +127,18 @@
             .addTextPage("...", "이건 인생에 둘도 없을 기회야! 지금이라면 나연누나와 뭐든 할 수 있어!")
             .addTextPage("동희", "바뀌어버린 세상이라면, 디시 나연갤 호감고닉 『나연누나밥먹나연』 으로서,")
             .addTextPage("...", "나연누나와 『밥』을 먹고야 말겠어!")
-            .addTextPage(null, "(카톡!)")
+            .addEventsAsPage([
+                SoundEvent.sfx("audio/katalk.mp3"),
+                TextBarEvent.text(null, "(카톡!)")
+            ])
             .addTextPage(null, "굳은 결심을 다지던 중, 카톡 소리가 내 집중을 깨뜨렸다.")
             .addEventsAsPage([
                 CanvasEvent.addImage("phone", "images/characters/phone.png", modelPosition.center, imageShowType.FadeIn),
                 TextBarEvent.text(null, "[휴대폰 화면]")
             ])
             .addEventsAsPage([
-                CanvasEvent.addImage("phone2", "images/characters/phoneTalk.png", modelPosition.center, imageShowType.FadeIn),
                 CanvasEvent.removeObject("phone", imageHideType.Disappear),
+                CanvasEvent.addImage("phone2", "images/characters/phoneTalk.png", modelPosition.center, imageShowType.FadeIn),
                 TextBarEvent.text("나연", "- 너 청소 째고 도망가면 어떡해!")
             ])
             .addTextPage(null, "남녀 칠세 부동석이라 하였던가. 여자와 말 한번 나누어 본 적 없는 나에게 거대한 시련이 다가왔다.")
@@ -138,13 +167,14 @@
             .addTextPage("나연", "-대신 다음번엔 밥 한끼로 안 끝날거야! (삐진 이모티콘)");
         textGame.addBranch(branch_1_2);
 
-        
+
         let branch_1_3 = new Branch("branch_1_3", null)
             .addTextPage("동희", "-어쩌라고 야발")
             .addTextPage("...", "무심코 평소처럼 말해버렸다...")
             .addTextPage("나연", "-너 내일 학교에서 보자")
             .addEndingAsPage("BAD END - 다음날 학교에서 나연누나에게 맞아 죽었다.");
         textGame.addBranch(branch_1_3);
+
 
         let branch_2 = new Branch("branch_2", "branch_3")
             .addEventsAsPage([
@@ -161,6 +191,9 @@
         let branch_3 = new Branch("branch_3", null)
             .addEventsAsPage([
                 CanvasEvent.changeBackGround("images/backgrounds/school.jpg"),
+                DelayEvent.delay(500),
+                SoundEvent.stopbackground(),
+                SoundEvent.background("audio/background/Ohayou.mp3"),
                 TextBarEvent.text(null, "[다음날 학교]")
             ])
             .addTextPage("...", "어제를 교훈삼아 오늘은 일찍 출발해서 학교에 제일 먼저 도착했다. 오늘은 단축수업이라 급식이 없으니, 운이 좋다면 나연누나와 같이 밥을 먹을 수 있을지도 모른다.")
@@ -168,7 +201,8 @@
             .addTextPage(null, "나연누나에게 할 말을 생각하며 머리를 쥐어뜯던 중, 누군가 교실에 들어왔다.")
             .addTextPage(null, "(덜컥)")
             .addEventsAsPage([
-                CanvasEvent.addImage("nayeon", "images/characters/Nayeon.png", modelPosition.center, imageShowType.FadeIn)
+                CanvasEvent.addImage("nayeon", "images/characters/Nayeon.png", modelPosition.center, imageShowType.FadeIn),
+                SoundEvent.sfx("audio/Walk.mp3")
             ])
             .addTextPage("나연", "어? 너 오늘 웬일로 일찍 나왔네? 좋은아침이야!")
             .addTextPage("동희", "아, 그냥 일찍 일어나서.")
@@ -228,9 +262,15 @@
             .addTextPage("동희", "나랑 같이 밥 먹으러 갈래?")
             .addTextPage("나연", "그럴까? 어제 약속한것도 있고, 마침 배도 고팠는데 잘됐다.")
             .addTextPage("...", "성공이다 성공! 드디어 나연누나와 밥을 먹을 수 있다!")
+            .addEventsAsPage([
+                CanvasEvent.addImage("shadow", "images/characters/Shadow.png", modelPosition.right, imageShowType.FadeIn)
+            ])
             .addTextPage("반 친구1", "나연아 우리 같이 밥 먹으러 가자! 학교 앞에 새로 생긴 떡볶이집 진짜 맛있더라!")
             .addTextPage("...", "위험해 위험해 위험해. 나연누나와 밥 먹을 기회가 날아가게 생겼다! 제발 나연눈나가 나를 선택해주기를...")
             .addTextPage("나연", "미안, 오늘은 동희랑 같이 먹기로 해서. 다음에 같이 먹자.")
+            .addEventsAsPage([
+                CanvasEvent.removeObject("shadow", imageHideType.Disappear),
+            ])
             .addTextPage("...", "감사합니다 신이시여.. 나연눈나시여....")
             .addEventsAsPage([
                 CanvasEvent.removeObject("nayeon", imageHideType.Disappear)
@@ -245,13 +285,21 @@
         
         let branch_5 = new Branch("branch_5", null)
             .addTextPage("동희", "그 있잖아 오늘..")
+            .addEventsAsPage([
+                CanvasEvent.addImage("shadow1", "images/characters/Shadow.png", modelPosition.left, imageShowType.FadeIn)
+            ])
             .addTextPage("반 친구1", "나연아 우리 같이 밥 먹으러 가자! 학교 앞에 새로 생긴 떡볶이집 진짜 맛있더라!")
+            .addEventsAsPage([
+                CanvasEvent.addImage("shadow2", "images/characters/Shadow.png", modelPosition.right, imageShowType.FadeIn)
+            ])
             .addTextPage("반 친구2", "맞아! 어제 가봤는데 완전 장난 아니야.")
             .addTextPage("...", "어떻게 말해야 할지 고민하던 중 다른 애들이 몰려와 말할 기회를 놓쳐버렸다.")
             .addTextPage("나연", "동희야 밥은 다음에 사줘, 오늘은 약속이 생겨서")
             .addTextPage("동희", "아.. 으응..")
             .addEventsAsPage([
-                CanvasEvent.removeObject("nayeon", imageHideType.Disappear)
+                CanvasEvent.removeObject("nayeon", imageHideType.Disappear),
+                CanvasEvent.removeObject("shadow1", imageHideType.Disappear),
+                CanvasEvent.removeObject("shadow2", imageHideType.Disappear)
             ])
             .addTextPage("...", "어쩔 수 없나.. 다음을 기약해야겠다.")
             .addEventsAsPage([
@@ -276,6 +324,7 @@
             .addTextPage("...", "나는 바로 옷을 갖춰입고 학교로 향했다.")
             .addEventsAsPage([
                 CanvasEvent.changeBackGround("images/backgrounds/street.jpg"),
+                DelayEvent.delay(500),
                 TextBarEvent.text(null, "[학교 앞]")
             ])
             .addEventsAsPage([
@@ -297,17 +346,21 @@
         
         let branch_6 = new Branch("branch_6", null)
             .addEventsAsPage([
+                SoundEvent.stopbackground(),
+                SoundEvent.background("audio/background/Sayonara.mp3"),
                 TextBarEvent.text(null, "[며칠 후]")
             ])
             .addTextPage("...", "그렇게 며칠을 미루고 미뤘을까... 코로나 바이러스가 찾아와 더이상 나연눈나와 만날수 없게 되었다. 그떄를 아무리 후회하더라도 더이상 돌이킬 수 없다.")
             .addTextPage("...", "끝없는 후회만을 반복하고 있는 내게 나연눈나가 연락해왔다.")
             .addEventsAsPage([
+                SoundEvent.sfx("audio/katalk.wav"),
                 CanvasEvent.addImage("phone2", "images/characters/phoneTalk.png", modelPosition.center, imageShowType.FadeIn)
             ])
             .addTextPage("나연", "-뭐해? 나는 지금 밥먹는데")
             .addTextPage("...", "밥을 먹고있어봤자 나는 가지도 못하고.. 의미없을 뿐이다.")
             .addEventsAsPage([
-                CanvasEvent.removeObject("phone2", imageHideType.Disappear)
+                CanvasEvent.removeObject("phone2", imageHideType.Disappear),
+                SoundEvent.sfx("audio/PhoneRing.mp3")
             ])
             .addTextPage(null, "(따르르릉-)")
             .addTextPage("...", "힘없이 늘어진 내게 갑자기 전화가 걸려왔다. 모르는 번호, 받아볼까?")
@@ -321,6 +374,11 @@
 
         
         let branch_6_1 = new Branch("branch_6_1", null)
+            .addEventsAsPage([
+                SoundEvent.stopbackground(),
+                SoundEvent.background("audio/background/Confession.mp3"),
+                TextBarEvent.text("...", "나는 전화를 받기로 했다.")
+            ])
             .addTextPage("나연", "동희야 뭐해?")
             .addTextPage("...", "무시하려 했던 모르는 번호는 나연눈나의 번호였다. 나연눈나의 다정한 목소리에, 어쩐지 눈물이 흘렀다.")
             .addTextPage("동희", "밥 먹으려고 준비하던 중이였어.")
@@ -329,7 +387,7 @@
             .addTextPage("나연", "왜 대답이 없어? 혹시 바빠?")
             .addTextPage("동희", "아.. 아냐... 좋아")
             .addEventsAsPage([
-                CanvasEvent.changeBackGround("images/backgrounds/NayeonScreen.png"),
+                CanvasEvent.changeBackGround("images/backgrounds/NayeonScreen.png")
             ])
             .addEndingAsPage("END - 온라인으로 밥먹나연");
         
@@ -337,16 +395,23 @@
         
         
         let branch_6_2 = new Branch("branch_6_2", null)
-            .addTextPage("...", "나연누나와 밥을 먹지도 못하는데, 전화 따위가 눈에 들어올리 없다.")
+            .addEventsAsPage([
+                SoundEvent.stopbackground(),
+                SoundEvent.background("audio/background/JustMonika.mp3"),
+                TextBarEvent.text("...", "나연누나와 밥을 먹지도 못하는데, 전화 따위가 눈에 들어올리 없다.")
+            ])
             .addTextPage("...", " 나연누나와 같은 반이 되었는데 같이 밥을 먹지도 못하고, 슬픔에 눈물만 하염없이 흐른다.")
             .addTextPage("...", "문득 나를 이렇게 만든 세상에 대해 화가 났다. 미치도록 화가 나서 견딜 수가 없어 소리쳤다.")
             .addTextPage("동희", "나 다시 돌아갈래!!")
             .addTextPage("...", "소리치는 내게 어쩐지 시끄러운 소리가 머릿속에 울렸다.")
-            .addTextPage(null, "(삑- 삑- 삑- 삐————-)")
+            .addEventsAsPage([
+                SoundEvent.sfx("audio/HeartDeath.mp3"),
+                TextBarEvent.text("...", "(삑- 삑- 삑- 삐————-)")
+            ])
             .addTextPage("...", "응급실에서나 들릴 법한 소리. 이해할 수 없는 상황. 그떄, 머릿속에 한가지 기억이 번뜩였다.")
             .addTextPage("동희", "아.. 그때 트럭...")
             .addEventsAsPage([
-                CanvasEvent.changeBackGround("images/backgrounds/NayeonTruck.png"),
+                CanvasEvent.changeBackGround("images/backgrounds/NayeonTruck.png")
             ])
             .addTextPage("동희", "난.. 죽어버린건가")
             .addEventsAsPage([
@@ -375,21 +440,26 @@
         </div>
     </div>
     <script>
+        textGame.setTextBarElement(document.getElementById('chatBox'), document.getElementById('nameBox'));
+        textGame.setCanvasElement(document.getElementById('backgroundImg'), document.getElementById('leftImg'), document.getElementById('centerImg'), document.getElementById('rightImg'));
+        textGame.setSoundElement(document.getElementById('backgroundSound'), document.getElementById('activeSound'));
         textGame.start(branch_1);
         
-        const cc = new CanvasController();
-        const tbc = new TextBarController();
-        const sc = new SoundController();
-        cc.initCanvas(document.getElementById('backgroundImg'), document.getElementById('leftImg'), document.getElementById('centerImg'), document.getElementById('rightImg'));
-        tbc.initTextBar(document.getElementById('chatBox'), document.getElementById('nameBox'));
-        sc.initSound(document.getElementById('backgroundSound'), document.getElementById('activeSound'));
+        // const cc = new CanvasController();
+        // const tbc = new TextBarController((str) => {
+        //     console.log(str);
+        // });
+        // const sc = new SoundController();
+        // cc.init(document.getElementById('backgroundImg'), document.getElementById('leftImg'), document.getElementById('centerImg'), document.getElementById('rightImg'));
+        // tbc.init(document.getElementById('chatBox'), document.getElementById('nameBox'));
+        // sc.init(document.getElementById('backgroundSound'), document.getElementById('activeSound'));
         
-        cc.setBackground('test');
-        cc.imageShow('nayeon', 'main', 1, 0);
-        cc.imageRemove('nayeon', 1);
-        tbc.setText('나연', '안녕히히');
-        tbc.clearTextBar();
-        console.log(tbc.showBranch(['aesf', 'sss']));
+        // cc.setBackground('test');
+        // cc.imageShow('nayeon', 'main', 1, 0);
+        // cc.imageRemove('nayeon', 1);
+        // tbc.setText('나연', '안녕히히');
+        // tbc.clearTextBar();
+        // console.log(tbc.showBranch(['aesf', 'sss', 'sefsfsef']));
     </script>
 </body>
 </html>
