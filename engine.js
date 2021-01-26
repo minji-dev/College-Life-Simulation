@@ -691,6 +691,10 @@ class CanvasController {
         canvasDiv.innerHTML = text;
         canvasDiv.style.color = "white";
         canvasDiv.style.paddingTop = "27vw";
+
+        setTimeout(() => {
+            location.href = "main.html";
+        }, 5000);
     }
 }
 
