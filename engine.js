@@ -2,6 +2,7 @@ class TextGame {
     constructor() {
         this._textBarController = new TextBarController();
         this._canvasController = new CanvasController();
+        this._soundController = new SoundController();
         this._branchManager = new BranchManager();
         this._currentBranch = new Branch("Root", "END");
         this._currentPageIndex = 0;
@@ -19,37 +20,43 @@ class TextGame {
     //branchName: String, return: Branch
     removeBranch(branchName) {
         return this._branchManager.removeBranch(branchName);
-    }   
+    }
+
+    setEle
 
     //entryBranch: Branch
     start(entryBranch) {
-        this._textBarController.initTextBar();
-        this._canvasController.initCanvas();
         this._currentBranch = entryBranch;
+        this.nextPage();
     }
 
     nextPage() {
-        if (this._currentBranch.pages[currentpageindex].baseEvents.find(b => {
+        if (this._currentBranch.pages[this._currentPageIndex].baseEvents.find(b => {
             b.eventType === EventType.TextBar && b.textBarEventType === TextbarEventType.Branch
         }))
             return;
 
-        if (currentBranch.pages.length < this._currentPageIndex)
+        if (this._currentBranch.pages.length < this._currentPageIndex)
             return;
 
-        if (_delaytimer !== null)
+        if (this._delaytimer !== null)
             clearTimeout(this._delaytimer);
         
         //currentPage: Page
-        let currentPage = this._currentBranch.pages[currentpageindex];
+        let currentPage = this._currentBranch.pages[this._currentPageIndex];
         //currentEvents: BaseEvent[]
         let currentEvents = currentPage.baseEvents;
         
         this.eventProcess(currentEvents);
 
-        currentPageIndex += 1;            
-        if (currentBranch.pages.length <= this._currentPageIndex) {
-            this._canvasController.endScreen(_currentBranch.endingText);
+        this._currentPageIndex += 1;            
+        if (this._currentBranch.pages.length <= this._currentPageIndex) {
+            if(this._currentBranch._end === null)
+                this._canvasController.endScreen("END (Error)"); 
+            else {
+                this._currentBranch = this._currentBranch._end;
+                this._currentPageIndex = 0;
+            }
         } 
     }
 
@@ -57,7 +64,7 @@ class TextGame {
     eventProcess(baseEvent){
         //item: BaseEvent 
         for (let index = 0; index < baseEvent.length; index++) {
-            const item = array[index];
+            const item = baseEvent[index];
             switch (item) {
                 case EventType.TextBar:
                     this.textBarProcess(item);
@@ -65,6 +72,10 @@ class TextGame {
 
                 case EventType.Canvas:
                     this.canvasProcess(item);
+                    break;
+
+                case EventType.Sound:
+                    this.soundProcess(item);
                     break;
 
                 case EventType.Delay:
@@ -144,6 +155,25 @@ class TextGame {
         }
     }
     
+    //soundEvent: SoundEvent
+    soundProcess(soundEvent) {
+        switch (soundEvent) {
+            case SoundEventType.Background:
+                if (soundEvent.stop === true)
+                    this._soundController.stopBackground();
+                else
+                    this._soundController.playBackground(soundEvent.src);
+                break;
+                
+            case SoundEventType.Sfx:
+                this._soundController.playSound(soundEvent.src)
+                break;
+        
+            default:
+                break;
+        }
+    }
+    
     //delayEvent: DelayEvent, index: Number
     delayProcess(delayEvent, index) {
         this._delaytimer = setTimeout(() => {
@@ -174,7 +204,8 @@ class TextGame {
 const EventType = {
 	TextBar: 0,
     Canvas: 1,
-    Delay: 2
+    Sound: 2,
+    Delay: 3
 }
 
 //TextbarEventType: Number
@@ -188,7 +219,8 @@ const CanvasEventType = {
 	AddImage: 0,
     ChangeBackGround: 1,
     DrawText: 2,
-    RemoveObject: 3
+    ShowEnding: 3,
+    RemoveObject: 4
 }
 
 class Page {
@@ -245,14 +277,14 @@ class TextBarEvent extends BaseEvent {
         this._eventData = eventData;
     }
 
-    //name: String, text: String
+    //name: String, text: String, return: TextBarEvent
     static text(name, text) {
-        new TextBarEvent(TextbarEventType.Text, new TextPair(name, text));
+        return new TextBarEvent(TextbarEventType.Text, new TextPair(name, text));
     }
 
-    //branchPairs: BranchPair[]
+    //branchPairs: BranchPair[], return: TextBarEvent
     static branch(branchPairs) {
-        new TextBarEvent(TextbarEventType.Branch, branchPairs);
+        return new TextBarEvent(TextbarEventType.Branch, branchPairs);
     }
 
     //return: TextbarEventType
@@ -318,6 +350,14 @@ class CanvasEvent extends BaseEvent {
             new DrawTextPair(text)
         );
     }
+    
+    //return: CanvasEvent
+    static showEnding(text) {
+        return new CanvasEvent(
+            CanvasEventType.ShowEnding,
+            new DrawTextPair(text)
+        );
+    }
 
     //return: CanvasEvent
     static removeObject(name, transition) { 
@@ -373,6 +413,36 @@ class RemoveObjectPair {
     get transition() { return this._transition; }
 }
 
+//SoundEventType: Number
+const SoundEventType = {
+    Background: 0,
+    Sfx: 1
+}
+
+class SoundEvent extends BaseEvent {
+    //src: String, soundEventType: SoundEventType, stop: bool
+    constructor(src, soundEventType, stop) {
+        super(EventType.Sound);
+        this._src = src;
+        this._stop = stop;
+    }
+
+    static background(src) {
+        return new SoundEvent(src, SoundEventType.Background, false);
+    }
+
+    static stopbackground() {
+        return new SoundEvent(null, SoundEventType.Background, true);
+    }
+
+    static sfx(src) {
+        return new SoundEvent(src, SoundEventType.Sfx, false);
+    }
+
+    get src() { return this._src; }
+    get stop() { return this._stop; }
+}
+
 class DelayEvent extends BaseEvent {
     //delay: Number
     constructor(delay) {
@@ -389,20 +459,66 @@ class DelayEvent extends BaseEvent {
 
 class TextBarController {
     constructor() {
+        this._chatBox = null;
+        this._nameBox = null;
     }
 
-    initTextBar() {
-
+    //chatBox: HTMLElement, nameBox: HTMLElement
+    initTextBar(chatBox, nameBox) {
+        this._chatBox = chatBox;
+        this._nameBox = nameBox;
     }
 
     //name: String, text: String
     setText(name, text) { 
+        //const chatBox = document.getElementById("chatBox");
+        if(name == null) {
+            this._nameBox.style.visibility = "hidden";
+            this._nameBox.innerHTML = "";
+        } else{
+            this._nameBox.style.visibility = "visible";
+            this._nameBox.innerHTML = name;
+        }
+
+        this._chatBox.innerHTML = text;
         
     }
 
     //options: String[], return: String
     showBranch(options) { 
-        
+        let button = [];
+        let label = [];
+        let text = [];
+        for(let i = 0; i < options.length; i++){
+            label[i] = document.createElement('label');
+            button[i] = document.createElement('button');
+            text[i] = document.createElement('span');
+            this._chatBox.appendChild(label[i]);
+            label[i].appendChild(button[i]);
+            label[i].appendChild(text[i]);
+            label[i].appendChild(document.createElement('br'));
+            label[i].appendChild(document.createElement('br'));
+            text[i].innerHTML = "→" + options[i];
+            
+            eventlistener(i).then(function(resolvedData) {
+                console.log(resolvedData);
+              });
+        }
+        function eventlistener(i) {
+            return new Promise(function(resolve, reject) {
+                button[i].addEventListener('click', function(event) {
+                    resolve(options[i]);
+                }, false);
+            })
+        }
+    }
+
+    clearTextBar() {
+        while(this._chatBox.hasChildNodes()){
+            this._chatBox.removeChild(this._chatBox.firstChild);
+        }
+        this._nameBox.style.visibility = "hidden";
+        this._nameBox.innerHTML = "";
     }
 }
 
@@ -420,46 +536,87 @@ const imageHideType = {
 
 //modelPosition: Number
 const modelPosition = {
-    center: 0,
-    left: 1,
+    left: 0,
+    center: 1,
     right: 2
 }
 
 class CanvasController {
     constructor() {
+        this._canvasImg = null;
+        this._leftImg = null;
+        this._centerImg = null;
+        this._rightImg = null;
     }
 
+    //canvasImg: HTMLElement, leftImg: HTMLElement, centerImg: HTMLElement, rightImg: HTMLElement
+    initCanvas(canvasImg, leftImg, centerImg, rightImg) {
+        this._canvasImg = canvasImg;
+        this._leftImg = leftImg;
+        this._centerImg = centerImg;
+        this._rightImg = rightImg;
+        let img = document.getElementById('canvasDiv').getElementsByClassName('img');
+        for(let i = 0; i < 3; i++){
+            img[i].style.opacity = 0;
+        }
+    }
     //name: String, src: String, positon: modelPosition transition: imageShowType
-    imageShow(name, src, positon, transition) { // 
-        if(position === left) const img = getElementById("left");
-        if(position === center) const img = getElementById("center");
-        if(position === right) const img = getElementById("right");
-        img.src = src;
-        img.class = name;
+    imageShow(name, src, position, transition) { // 
+        let img;
+        if(position === 0) {
+            img = this._leftImg;
+        }
+        else if(position === 1) {
+            img = this._centerImg;
+        }
+        else if(position === 2) {
+            img = this._rightImg;
+        }
+        img.src = "images/characters/" + src + ".jpeg";
+        img.className = name;
+        if(transition === 1){
+            
+            img.style.transition = '2s';
+            img.style.opacity = '1';
+            //img.classList.add("show");
+        }
+        else{
+            img.style.transition = 'all 0s';
+            img.style.opacity = '1';
+            //img.classList.add("showImmediately");
+        }
+
     }
     
     //name: String, transition: imageHideType
     imageRemove(name, transition) { 
         //name으로 이미지를 지울수 있음
-        const img = document.getElementsByClassName(name)[0];
-        img.class = "";
-        img.src = "";
+        let img = document.getElementById('canvasDiv').getElementsByClassName(name)[0];
+        img.className = name;
+        if(transition === 1) {
+            img.style.transition = 'all 2s';
+            img.style.opacity = '0';
+            //img.classList.add("hide");
+        }
+        else{
+            img.style.transition = 'all 0s';
+            img.style.opacity = '0';
+            //img.classList.add("hideImmediately");
+        }
     }
 
     //src: String
     setBackground(src) {
-        const backgroundImg = document.getElementById("backgroundImg");
-        backgroundImg.src = "images/" + src + ".jpeg";
+        this._canvasImg.src = "images/backgrounds/" + src + ".jpeg";
     }
 
     //text: String
     drawtext(text){ //null 넣으면 지워짐
-        const chatBox = document.getElementById("chatBox");
         if(text === null){
-            chatBox.innerHTML = "";
+            this._chatBox.innerHTML = "";
             return;
         }
-        chatBox.innerHTML = text;
+        this._chatBox.innerHTML = text;
     }
 
     //text: String
@@ -490,17 +647,17 @@ class BranchManager {
 }
 
 class Branch {
-    //branchName: String, endingText: String
-    constructor(branchName, endingText) {
+    //branchName: String, end: Branch
+    constructor(branchName, end) {
         this._branchName = branchName;
-        this._endingText = endingText;
+        this._end = end;
         //pages: Page[]
         this._pages = [];
     }
 
     //page: Page, return: Branch
     addPage(page) {
-        this._pages.push(baseEvpageent);
+        this._pages.push(page);
         return this;
     }
 
@@ -526,6 +683,11 @@ class Branch {
         return this;
     }
 
+    //text: String
+    addEndingAsPage(text) {
+        this.addPage(new Page().addEvent(CanvasEvent.showEnding(text)));
+    }
+
     //return: Page
     removePage() {
         return this._pages.pop();
@@ -534,7 +696,33 @@ class Branch {
     //return: String
     get branchName() { return this._branchName; }
     //return: String
-    get endingText() { return this._endingText; }
+    get end() { return this._end; }
     //return: Page[]
     get pages() { return this._pages; }
+}
+
+class SoundController {
+    constructor() {
+        this._backgroundSound = null;
+        this._activeSound = null;
+    }
+
+    initSound(backgroundSound, activeSound) {
+        this._backgroundSound = backgroundSound;
+        this._activeSound = activeSound;
+    }
+
+    //src: String
+    playBackground(src) {
+        this._backgroundSound.src = src;
+    }
+
+    stopBackground() {
+        this._backgroundSound.src = "";
+    }
+
+    //src: String
+    playSound(src) {
+        this._activeSound.src = src;
+    }
 }

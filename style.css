@@ -68,6 +68,42 @@ body{
     background-color: #000;
     color: #fff;
     opacity: 0.5;
-
+    font-size: 2vw;
     padding: 3vw;
+}
+
+button{
+    visibility: hidden;
+}
+
+label:hover{
+    color: #49c0ec;
+}
+
+#text1, #text2{
+    display: inline-block;
+}
+
+.standard{
+    opacity: 0;
+}
+.show{
+    -webkit-transition: all 1s;
+    transition: all 1s;
+    opacity: 1 !important;
+}
+.showImmediately{
+    -webkit-transition: all 0s;
+    transition: all 0s;
+    opacity: 1;
+}
+.hide{
+    -webkit-transition: all 1s;
+    transition: all 1s;
+    opacity: 0;
+}
+.hideImmediately{
+    -webkit-transition: all 0s;
+    transition: all 0s;
+    opacity: 1;
 }
