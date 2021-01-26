@@ -79,7 +79,7 @@ class TextGame {
             let jumpBranch = this._branchManager.getBranch(this._currentBranch.end);
             if (jumpBranch !== null) {
                 this._currentBranch = jumpBranch;
-                this._currentPageIndex = 0;
+                this._currentPageIndex = -1;
             }
         }
         this._currentPageIndex += 1;   
@@ -598,6 +598,8 @@ class CanvasController {
     //canvasImg: HTMLElement, leftImg: HTMLElement, centerImg: HTMLElement, rightImg: HTMLElement
     init(canvasImg, leftImg, centerImg, rightImg) {
         this._canvasImg = canvasImg;
+        this._canvasImg.style.opacity = "0";
+        this._canvasImg.style.transitionDuration = "1s";
         this._leftImg = leftImg;
         this._centerImg = centerImg;
         this._rightImg = rightImg;
@@ -642,22 +644,30 @@ class CanvasController {
         if(img === undefined) return;
         img.className = "";
         if(transition === 1) {
-            img.style.transition = 'all 2s';
+            img.style.transition = '2s';
             img.style.opacity = '0';
-            //img.classList.add("hide");
+            setTimeout(() => {
+                img.src = "";
+            }, 2000);
         }
         else{
-            img.style.transition = 'all 0s';
+            img.style.transition = '0s';
             img.style.opacity = '0';
-            //img.classList.add("hideImmediately");
+            setTimeout(() => {
+                img.src = "";
+            }, 1000);
         }
     }
 
     //src: String
     setBackground(src) {
-        this._canvasImg.style.visibility = "hidden";
-        this._canvasImg.src = src;
-        this._canvasImg.style.visibility = "visible";
+        this._canvasImg.style.opacity = "0";
+        setTimeout(() => {
+            this._canvasImg.src = src;
+        }, 1000);
+        setTimeout(() => {
+            this._canvasImg.style.opacity = "1";
+        }, 2000);
     }
 
     //text: String
@@ -692,13 +702,10 @@ class BranchManager {
     //branch: Branch
     addBranch(branch) {
         this._branches.push(branch);
-        console.log(this._branches);
     }
 
     //branchName: String, return: Branch
     getBranch(branchName) {
-        console.log(branchName);
-        console.log(this._branches);
         let find = this._branches.find(branch => branch.branchName === branchName);
         if (find === undefined)
             return null;
