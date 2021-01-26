@@ -26,10 +26,6 @@ class TextGame {
         this._canvasController.init(canvasImg, leftImg, centerImg, rightImg);
     }
 
-    setSoundElement(backgroundSound, activeSound) {
-        this._soundController.init(backgroundSound, activeSound);
-    }
-
     //entryBranch: Branch
     start(entryBranch) {
         this._currentBranch = entryBranch;
@@ -40,21 +36,37 @@ class TextGame {
         if (this._currentBranch.pages.length <= this._currentPageIndex)
             return;
 
-        if (this._currentBranch.pages[this._currentPageIndex].baseEvents.find(b => {
-            b.eventType === EventType.TextBar && b.textBarEventType === TextbarEventType.Branch
-        }))
+        if (this._isBranching === true)
             return;
+            
+        if (this._currentPageIndex != 0)
 
-        if (this._currentBranch.pages[this._currentPageIndex].baseEvents.find(b => {
-            b.eventType === EventType.TextBar && b.textBarEventType === TextbarEventType.Branch
-        }))
-            return;
-
-        if ( this._isBranching === true)
-            return;
-
-        if (this._delaytimer !== null)
+        if (this._delaytimer !== null) {
+            if (this._currentPageIndex != 0) {
+                if (this._currentBranch.pages[this._currentPageIndex - 1].baseEvents.find(b => {
+                    return b.eventType === EventType.TextBar && b.textBarEventType === TextbarEventType.Branch
+                }) != undefined)
+                    return;
+    
+                if (this._currentBranch.pages[this._currentPageIndex - 1].baseEvents.find(b => {
+                    return b.eventType === EventType.Canvas && b.canvasEventType === CanvasEventType.ChangeBackGround
+                }) != undefined)
+                    return;
+    
+                if (this._currentBranch.pages[this._currentPageIndex - 1].baseEvents.find(b => {
+                    return b.eventType === EventType.Canvas && b.canvasEventType === CanvasEventType.RemoveObject
+                }) != undefined)
+                    return;
+    
+                if (this._currentBranch.pages[this._currentPageIndex - 1].baseEvents.find(b => {
+                    return b.eventType === EventType.Sound
+                }) != undefined)
+                    return;
+            }
+            
             clearTimeout(this._delaytimer);
+            this._delaytimer = null;
+        }
         
         //currentPage: Page
         let currentPage = this._currentBranch.pages[this._currentPageIndex];
@@ -63,15 +75,14 @@ class TextGame {
         
         this.eventProcess(currentEvents);
 
-        this._currentPageIndex += 1;            
-        if (this._currentBranch.pages.length <= this._currentPageIndex) {
-            if(this._currentBranch._end === null)
-                this._canvasController.endScreen("END (Error)");
-            else {
-                this._currentBranch = this._currentBranch._end;
+        if (this._currentBranch.pages.length <= this._currentPageIndex + 1) {
+            let jumpBranch = this._branchManager.getBranch(this._currentBranch.end);
+            if (jumpBranch !== null) {
+                this._currentBranch = jumpBranch;
                 this._currentPageIndex = 0;
             }
-        } 
+        }
+        this._currentPageIndex += 1;   
     }
 
     //baseEvent: BaseEvent[]
@@ -113,7 +124,7 @@ class TextGame {
                 this._isBranching = true;
                 let selectedData = [];
                 textBarEvent.eventData.forEach((item) => selectedData.push(item.name));
-                this._textBarController.showBranch(selectedData, this);
+                this._textBarController.showBranch(textBarEvent.eventData, this);
                 break;
         
             default:
@@ -144,7 +155,13 @@ class TextGame {
                     canvasEvent._eventData.text
                 );
                 break;
-
+            
+            case CanvasEventType.ShowEnding:
+                this._canvasController.endScreen(
+                    canvasEvent._eventData.text
+                );
+                break;
+                
             case CanvasEventType.RemoveObject:
                 this._canvasController.imageRemove(
                     canvasEvent._eventData.name, 
@@ -159,7 +176,7 @@ class TextGame {
     
     //soundEvent: SoundEvent
     soundProcess(soundEvent) {
-        switch (soundEvent) {
+        switch (soundEvent.soundEventType) {
             case SoundEventType.Background:
                 if (soundEvent.stop === true)
                     this._soundController.stopBackground();
@@ -202,13 +219,14 @@ class TextGame {
                         break;
                 }
             }
+            this._delaytimer = null;
         }, delayEvent.delay);
     }
 
-    //branchName: String
-    branchProcess(branchName, o) {
-        let jumpBranch = o._branchManager.getBranch(branchName);
-        if (branchName === null) {
+    //branchPair: BranchPair
+    branchProcess(branchPair, o) {
+        let jumpBranch = o._branchManager.getBranch(branchPair.branch);
+        if (jumpBranch == null) {
             o._canvasController.endScreen("END (Error)");
             o._isBranching = false;
             return;
@@ -450,6 +468,7 @@ class SoundEvent extends BaseEvent {
     constructor(src, soundEventType, stop) {
         super(EventType.Sound);
         this._src = src;
+        this._soundEventType = soundEventType;
         this._stop = stop;
     }
 
@@ -466,6 +485,7 @@ class SoundEvent extends BaseEvent {
     }
 
     get src() { return this._src; }
+    get soundEventType() { return this._soundEventType; }
     get stop() { return this._stop; }
 }
 
@@ -506,17 +526,14 @@ class TextBarController {
             this._nameBox.style.visibility = "visible";
             this._nameBox.innerHTML = name;
         }
-
-        this._chatBox.innerHTML = text;
-        
+        this._chatBox.innerHTML = text + "<br>";
     }
 
-    //options: String[], o: any, return: String
+    //options: BranchPair[], o: any, return: String
     showBranch(options, o) { 
         let button = [];
         let label = [];
         let text = [];
-        let result;
         for(let i = 0; i < options.length; i++){
             label[i] = document.createElement('label');
             button[i] = document.createElement('button');
@@ -525,8 +542,7 @@ class TextBarController {
             label[i].appendChild(button[i]);
             label[i].appendChild(text[i]);
             label[i].appendChild(document.createElement('br'));
-            label[i].appendChild(document.createElement('br'));
-            text[i].innerHTML = "→" + options[i];
+            text[i].innerHTML = "→" + options[i].name;
 
             eventlistener(i).then((resolvedData) => {
                 this._callback(resolvedData, o);
@@ -604,6 +620,7 @@ class CanvasController {
         }
         img.src = src;
         img.className = name;
+        img.style.width = "40vw";
         if(transition === 1){
             
             img.style.transition = '2s';
@@ -621,8 +638,9 @@ class CanvasController {
     //name: String, transition: imageHideType
     imageRemove(name, transition) { 
         //name으로 이미지를 지울수 있음
-        let img = document.getElementById('canvasDiv').getElementsByClassName(name)[0];
-        img.className = name;
+        const img = document.getElementById('canvasDiv').getElementsByClassName(name)[0];
+        if(img === undefined) return;
+        img.className = "";
         if(transition === 1) {
             img.style.transition = 'all 2s';
             img.style.opacity = '0';
@@ -637,7 +655,9 @@ class CanvasController {
 
     //src: String
     setBackground(src) {
+        this._canvasImg.style.visibility = "hidden";
         this._canvasImg.src = src;
+        this._canvasImg.style.visibility = "visible";
     }
 
     //text: String
@@ -651,7 +671,16 @@ class CanvasController {
 
     //text: String
     endScreen(text) {
-        //엔딩화면은 그냥 텍스트 띄우는 함수로 따로 만듬
+        const canvasDiv = document.getElementById('canvasDiv');
+        while(canvasDiv.firstChild){
+            canvasDiv.removeChild(canvasDiv.firstChild);
+        }
+        
+        canvasDiv.style.backgroundColor = "black";
+        canvasDiv.classList.add("endScreen");
+        canvasDiv.innerHTML = text;
+        canvasDiv.style.color = "white";
+        canvasDiv.style.paddingTop = "27vw";
     }
 }
 
@@ -668,24 +697,18 @@ class BranchManager {
 
     //branchName: String, return: Branch
     getBranch(branchName) {
-        let find = null;
-        
+        console.log(branchName);
         console.log(this._branches);
-        for (let index = 0; index < this._branches.length; index++) {
-            const element = this._branches[index];
-            console.log(element);
-            if (element.branchName === branchName) {
-                find = element;
-                break;
-            }
-        }
-        //return this._branches.find(branch => branch.branchName === branchName);
-        return find;
+        let find = this._branches.find(branch => branch.branchName === branchName);
+        if (find === undefined)
+            return null;
+        else
+            return find;
     }
 }
 
 class Branch {
-    //branchName: String, end: Branch
+    //branchName: String, end: String
     constructor(branchName, end) {
         this._branchName = branchName;
         this._end = end;
@@ -724,6 +747,7 @@ class Branch {
     //text: String
     addEndingAsPage(text) {
         this.addPage(new Page().addEvent(CanvasEvent.showEnding(text)));
+        return this;
     }
 
     //return: Page
@@ -741,27 +765,26 @@ class Branch {
 
 class SoundController {
     constructor() {
-        this._backgroundSound = null;
-        this._activeSound = null;
-    }
-
-    //backgroundSound: HTMLElement, activeSound: HTMLElement
-    init(backgroundSound, activeSound) {
-        this._backgroundSound = backgroundSound;
-        this._activeSound = activeSound;
+        this._backgroundSound = new Audio();
+        this._activeSound = new Audio();
+        this._backgroundSound.volume = 0.2;
+        this._activeSound.volume = 0.2;
     }
 
     //src: String
     playBackground(src) {
         this._backgroundSound.src = src;
+        this._backgroundSound.play();
     }
 
     stopBackground() {
+        this._backgroundSound.pause();
         this._backgroundSound.src = "";
     }
 
     //src: String
     playSound(src) {
         this._activeSound.src = src;
+        this._activeSound.play();
     }
 }
