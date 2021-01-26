@@ -29,9 +29,7 @@
             .addTextPage("...", "잠깐... 뭔가 잊은게 있는 것 같은데..?")
             .addTextPage("동희", "맞다! 오늘 팬싸인회 날이지!")
             .addTextPage("...", "시계를 보니 시간은 벌써 팬싸인회 10분 전. 바로 준비해둔 가방과 토스트를 챙겨 밖으로 달려나간다.")
-            .addEventsAsPage([/*
-                SoundEvent.stopbackground(),
-                SoundEvent.background("audio/background/Ohayou.mp3"),*/
+            .addEventsAsPage([
                 CanvasEvent.changeBackGround("images/backgrounds/street.jpg"),
                 DelayEvent.delay(500),
                 TextBarEvent.text(null, "[집 앞]")
@@ -453,22 +451,6 @@
         textGame.setTextBarElement(document.getElementById('chatBox'), document.getElementById('nameBox'));
         textGame.setCanvasElement(document.getElementById('backgroundImg'), document.getElementById('leftImg'), document.getElementById('centerImg'), document.getElementById('rightImg'));
         textGame.start(branch_1);
-        
-        // const cc = new CanvasController();
-        // const tbc = new TextBarController((str) => {
-        //     console.log(str);
-        // });
-        // const sc = new SoundController();
-        // cc.init(document.getElementById('backgroundImg'), document.getElementById('leftImg'), document.getElementById('centerImg'), document.getElementById('rightImg'));
-        // tbc.init(document.getElementById('chatBox'), document.getElementById('nameBox'));
-        // sc.init(document.getElementById('backgroundSound'), document.getElementById('activeSound'));
-        
-        // cc.setBackground('test');
-        // cc.imageShow('nayeon', 'main', 1, 0);
-        // cc.imageRemove('nayeon', 1);
-        // tbc.setText('나연', '안녕히히');
-        // tbc.clearTextBar();
-        // console.log(tbc.showBranch(['aesf', 'sss', 'sefsfsef']));
     </script>
 </body>
 </html>

@@ -21,6 +21,7 @@ body{
     height: 56.25vw;
     position: relative;
     background-color: #000;
+    overflow: hidden;
 }
 
 #leftImgDiv{
