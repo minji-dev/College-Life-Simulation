@@ -9,6 +9,10 @@
 - Browser dating sim game engine and game implemented only with pure browser HTML, JS, and CSS.
 - You can configure scenarios by writing scripts using the builder.
 
+
+
+![ingame](doc/ingame.png)
+
 ![code](doc/code.png)
 시나리오 작성 예시는 index.html 에서 확인하실 수 있습니다.
 
