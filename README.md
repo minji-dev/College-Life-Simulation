@@ -10,7 +10,7 @@
 
 Autoplay permissions are required for sound effects.
 
-
+---
 
 - 순수 브라우저 HTML, JS, CSS 로만 구현된 브라우저 미연시 게임엔진및, 게임 입니다.
 - 빌더를 이용한 스크립트 작성으로 시나리오를 구성할 수 있습니다.
