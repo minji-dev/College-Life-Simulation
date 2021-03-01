@@ -1,6 +1,6 @@
-let textGame = new TextGame();
+const textGame = new TextGame();
 
-let branch_1 = new Branch("branch_1", null)
+const branch_1 = new Branch("branch_1", null)
   .addEventsAsPage([
     CanvasEvent.changeBackGround("images/backgrounds/home.jpg"),
     TextBarEvent.text(null, "[집 안]"),
@@ -235,7 +235,7 @@ let branch_1 = new Branch("branch_1", null)
   ]);
 textGame.addBranch(branch_1);
 
-let branch_1_1 = new Branch("branch_1_1", "branch_2")
+const branch_1_1 = new Branch("branch_1_1", "branch_2")
   .addTextPage("동희", "-죄송합니다 죽을 죄를 지었습니다!")
   .addTextPage("나연", "- 잘못한건 아는구나? 그럼 어떻게 벌을 줄까...")
   .addTextPage("나연", "- 아 그래! 너가 밥 한번 사주면 이번엔 눈감아줄게")
@@ -245,7 +245,7 @@ let branch_1_1 = new Branch("branch_1_1", "branch_2")
   );
 textGame.addBranch(branch_1_1);
 
-let branch_1_2 = new Branch("branch_1_2", "branch_2")
+const branch_1_2 = new Branch("branch_1_2", "branch_2")
   .addTextPage(
     "동희",
     "-미안해 바쁜 일이 있어서.. 내가 나중에 밥이라도 한번 살게"
@@ -254,7 +254,7 @@ let branch_1_2 = new Branch("branch_1_2", "branch_2")
   .addTextPage("나연", "-대신 다음번엔 밥 한끼로 안 끝날거야! (삐진 이모티콘)");
 textGame.addBranch(branch_1_2);
 
-let branch_1_3 = new Branch("branch_1_3", null)
+const branch_1_3 = new Branch("branch_1_3", null)
   .addEventsAsPage([
     TextBarEvent.text("동희", "-어쩌라고"),
     SoundEvent.stopbackground(),
@@ -270,7 +270,7 @@ let branch_1_3 = new Branch("branch_1_3", null)
   ]);
 textGame.addBranch(branch_1_3);
 
-let branch_2 = new Branch("branch_2", "branch_3")
+const branch_2 = new Branch("branch_2", "branch_3")
   .addEventsAsPage([
     CanvasEvent.removeObject("phone", imageHideType.Disappear),
     TextBarEvent.text("동희", "휴우...")
@@ -289,7 +289,7 @@ let branch_2 = new Branch("branch_2", "branch_3")
   );
 textGame.addBranch(branch_2);
 
-let branch_3 = new Branch("branch_3", null)
+const branch_3 = new Branch("branch_3", null)
   .addEventsAsPage([
     CanvasEvent.changeBackGround("images/backgrounds/school.jpg"),
     DelayEvent.delay(500),
@@ -330,7 +330,7 @@ let branch_3 = new Branch("branch_3", null)
   ]);
 textGame.addBranch(branch_3);
 
-let branch_3_1 = new Branch("branch_3_1", "branch_4")
+const branch_3_1 = new Branch("branch_3_1", "branch_4")
   .addTextPage("동희", "어제 말한거라니? 무슨 소리야?")
   .addTextPage(
     "나연",
@@ -343,12 +343,12 @@ let branch_3_1 = new Branch("branch_3_1", "branch_4")
   .addTextPage("나연", "어물쩍 넘어가려 하면 가만 안둬!");
 textGame.addBranch(branch_3_1);
 
-let branch_3_2 = new Branch("branch_3_2", "branch_4")
+const branch_3_2 = new Branch("branch_3_2", "branch_4")
   .addTextPage("동희", "다, 당연하지. 내가 밥 사주기로 했잖아?")
   .addTextPage("나연", "그래, 다행히 잘 기억하고 있구나?");
 textGame.addBranch(branch_3_2);
 
-let branch_4 = new Branch("branch_4", null)
+const branch_4 = new Branch("branch_4", null)
   .addTextPage(
     "...",
     "나연누나 생각을 하던 중이라 겨우겨우 대답해낼 수 있었다. 나연누나도 기억해주고 있으니, 이제 같이 밥먹는건 시간문제다."
@@ -387,7 +387,7 @@ let branch_4 = new Branch("branch_4", null)
   ]);
 textGame.addBranch(branch_4);
 
-let branch_4_1 = new Branch("branch_4_1", null)
+const branch_4_1 = new Branch("branch_4_1", null)
   .addTextPage("동희", "나랑 같이 밥 먹으러 갈래?")
   .addTextPage(
     "나연",
@@ -429,7 +429,7 @@ let branch_4_1 = new Branch("branch_4_1", null)
 
 textGame.addBranch(branch_4_1);
 
-let branch_5 = new Branch("branch_5", null)
+const branch_5 = new Branch("branch_5", null)
   .addTextPage("동희", "그 있잖아 오늘..")
   .addEventsAsPage([
     CanvasEvent.addImage(
@@ -481,7 +481,7 @@ let branch_5 = new Branch("branch_5", null)
   ]);
 textGame.addBranch(branch_5);
 
-let branch_5_1 = new Branch("branch_5_1", null)
+const branch_5_1 = new Branch("branch_5_1", null)
   .addTextPage("동희", "오늘 같이 밥 먹으러 갈래?")
   .addTextPage("나연", "그럴까? 오늘 마침 시간이 남는데, 잘됐다.")
   .addTextPage("...", "성공이다 성공! 드디어 나연누나와 밥을 먹을 수 있다!")
@@ -512,7 +512,7 @@ let branch_5_1 = new Branch("branch_5_1", null)
 
 textGame.addBranch(branch_5_1);
 
-let branch_6 = new Branch("branch_6", null)
+const branch_6 = new Branch("branch_6", null)
   .addEventsAsPage([
     SoundEvent.stopbackground(),
     SoundEvent.background("audio/background/Sayonara.mp3"),
@@ -554,7 +554,7 @@ let branch_6 = new Branch("branch_6", null)
   ]);
 textGame.addBranch(branch_6);
 
-let branch_6_1 = new Branch("branch_6_1", null)
+const branch_6_1 = new Branch("branch_6_1", null)
   .addEventsAsPage([
     SoundEvent.stopbackground(),
     SoundEvent.background("audio/background/Confession.mp3"),
@@ -584,7 +584,7 @@ let branch_6_1 = new Branch("branch_6_1", null)
 
 textGame.addBranch(branch_6_1);
 
-let branch_6_2 = new Branch("branch_6_2", null)
+const branch_6_2 = new Branch("branch_6_2", null)
   .addEventsAsPage([
     SoundEvent.stopbackground(),
     SoundEvent.background("audio/background/JustMonika.mp3"),

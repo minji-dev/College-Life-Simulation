@@ -69,14 +69,14 @@ class TextGame {
         }
         
         //currentPage: Page
-        let currentPage = this._currentBranch.pages[this._currentPageIndex];
+        const currentPage = this._currentBranch.pages[this._currentPageIndex];
         //currentEvents: BaseEvent[]
-        let currentEvents = currentPage.baseEvents;
+        const currentEvents = currentPage.baseEvents;
         
         this.eventProcess(currentEvents);
 
         if (this._currentBranch.pages.length <= this._currentPageIndex + 1) {
-            let jumpBranch = this._branchManager.getBranch(this._currentBranch.end);
+            const jumpBranch = this._branchManager.getBranch(this._currentBranch.end);
             if (jumpBranch !== null) {
                 this._currentBranch = jumpBranch;
                 this._currentPageIndex = -1;
@@ -225,7 +225,7 @@ class TextGame {
 
     //branchPair: BranchPair
     branchProcess(branchPair, o) {
-        let jumpBranch = o._branchManager.getBranch(branchPair.branch);
+        const jumpBranch = o._branchManager.getBranch(branchPair.branch);
         if (jumpBranch == null) {
             o._canvasController.endScreen("END (Error)");
             o._isBranching = false;
@@ -548,7 +548,7 @@ class TextBarController {
                 this._callback(resolvedData, o);
             });
         }
-        let tmpThis = this;
+        const tmpThis = this;
         function eventlistener(i) {
             return new Promise(function(resolve, reject) {
                 button[i].addEventListener('click', function(event) {
@@ -603,7 +603,7 @@ class CanvasController {
         this._leftImg = leftImg;
         this._centerImg = centerImg;
         this._rightImg = rightImg;
-        let img = document.getElementById('canvasDiv').getElementsByClassName('img');
+        const img = document.getElementById('canvasDiv').getElementsByClassName('img');
         for(let i = 0; i < 3; i++){
             img[i].style.opacity = 0;
         }
@@ -710,7 +710,7 @@ class BranchManager {
 
     //branchName: String, return: Branch
     getBranch(branchName) {
-        let find = this._branches.find(branch => branch.branchName === branchName);
+        const find = this._branches.find(branch => branch.branchName === branchName);
         if (find === undefined)
             return null;
         else
@@ -747,7 +747,7 @@ class Branch {
 
     //baseEvents: BaseEvent[]
     addEventsAsPage(baseEvents) {
-        let page = new Page();
+        const page = new Page();
         baseEvents.forEach(element => {
             page.addEvent(element);
         });
