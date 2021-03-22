@@ -2,7 +2,7 @@
 
 ## 브라우저 미연시 게임: 나연누나와밥먹는법
 
-### [PlayLink](https://developdh.github.io/HowToMeaLWithNayeon/main)
+### [PlayLink](https://developdh.github.io/HowToMeaLWithNayeon/main) //DISABLED
 
 ![perm](doc/perm.png)
 
@@ -19,9 +19,9 @@ Autoplay permissions are required for sound effects.
 
 
 
-![ingame](doc/ingame.png)
+<!-- ![ingame](doc/ingame.png) -->
 
-![code](doc/code.png)
+<!-- ![code](doc/code.png) -->
 시나리오 작성 예시는 scenario.js 에서 확인하실 수 있습니다.
 
 Examples of scenario creation can be found in scenario.js.
