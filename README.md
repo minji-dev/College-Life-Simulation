@@ -19,9 +19,9 @@ Autoplay permissions are required for sound effects.
 
 
 
-<!-- ![ingame](doc/ingame.png) -->
+![ingame](doc/ingame.png)
 
-<!-- ![code](doc/code.png) -->
+![code](doc/code.png)
 시나리오 작성 예시는 scenario.js 에서 확인하실 수 있습니다.
 
 Examples of scenario creation can be found in scenario.js.
