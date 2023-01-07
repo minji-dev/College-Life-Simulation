@@ -2,7 +2,7 @@
 
 ## 브라우저 미연시 게임: 나연누나와밥먹는법
 
-### [PlayLink](https://developdh.github.io/HowToMeaLWithNayeon/main) //DISABLED
+### [PlayLink](https://developdh.github.io/HowToMeaLWithNayeon/main)
 
 ![perm](doc/perm.png)
 
