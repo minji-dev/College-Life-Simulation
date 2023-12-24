@@ -3,9 +3,9 @@ const textGame = new TextGame();
 const branch_1 = new Branch("branch_1", "branch_2") // 내 대학생활은 어떻게...
   .addEventsAsPage([
     CanvasEvent.changeBackGround("images/backgrounds/1-howto.png"),
+    SoundEvent.background("audio/background/1-dokidoki.mp3"),
     TextBarEvent.text(null, "[2027년 3월]"),
     DelayEvent.delay(2000),
-    SoundEvent.background("audio/background/1-dokidoki.mp3"),
     TextBarEvent.text(null, "나는 이제 막 대학에 합격한 27학번 아기 새내기.")
   ])
   .addTextPage(null, "엄마가 대학 가면 여친 생기고 살 빠지고 잘생겨진다고 했는데...")
