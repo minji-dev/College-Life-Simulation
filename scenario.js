@@ -76,7 +76,7 @@ const branch_2 = new Branch("branch_2", "branch_3_1") // 새내기 배움터
   .addTextPage("아연", "그럼 지금부터! 아이유의 내 손을 잡아~ 공연 시작해 볼게요!")
   .addEventsAsPage([
     SoundEvent.stopbackground(),
-    SoundEvent.background("audio/2-iu.mp3"),
+    SoundEvent.background("audio/background/2-iu.mp3"),
     TextBarEvent.text(null, "(아연이 노래를 부른다)")
   ])
   .addEventsAsPage([
@@ -198,90 +198,134 @@ const branch_3_2_2 = new Branch("branch_3_2_2", "branch_4")
   ])
 textGame.addBranch(branch_3_2_2);
 
-
-
-/*
-const branch_4 = new Branch("branch_4", null) // 동아리 홍보 부스, 여기부터 시작!
-  .addTextPage(
-    "...",
-    "나연누나 생각을 하던 중이라 겨우겨우 대답해낼 수 있었다. 나연누나도 기억해주고 있으니, 이제 같이 밥먹는건 시간문제다."
-  )
-  .addTextPage(
-    "...",
-    "나연누나와 더 이야기를 나누려던 중 다른 친구들이 순식간에 몰려오고, 얘기할 수 없는 분위기가 되어버렸다."
-  )
+const branch_4 = new Branch("branch_4", null) // 동아리 홍보 부스
   .addEventsAsPage([
-    CanvasEvent.removeObject("nayeon", imageHideType.Disappear)
+    CanvasEvent.changeBackGround("images/backgrounds/4-hongbo.jpg"),
+    TextBarEvent.text(null, "[학교 안]"),
+    SoundEvent.stopbackground(),
+    SoundEvent.background("audio/background/4-hongbo.mp3"),
+    DelayEvent.delay(2000),
   ])
-  .addTextPage("동희", "할 수 없지, 방과 후 시간을 노려야겠다.")
-
+  .addTextPage(null, "오늘은 동아리 홍보 부스 날이다.")
+  .addTextPage("나", "아연 누나가 기계들의 합창 보컬이라고 했지? 부스가 어디 있나...")
+  .addTextPage(null, "[어디선가 감미로운 노랫소리가 들린다.]")
+  .addTextPage("나", "저기인가 보다!")
   .addEventsAsPage([
-    TextBarEvent.text(null, "[5시간 후]"),
-    CanvasEvent.changeBackGround("images/backgrounds/school.jpg")
+    SoundEvent.sfx("audio/Walk.mp3"),
   ])
-
-  .addTextPage("선생님", "자 그러면 오늘은 여기까지 하겠습니다")
-  .addTextPage("...", "이제 기회가 돌아왔다. 단축수업인 오늘이 최적의 기회다!")
   .addEventsAsPage([
+    SoundEvent.stopbackground(),
+    SoundEvent.background("audio/background/4-jannavi.mp3"),
     CanvasEvent.addImage(
-      "nayeon",
-      "images/characters/Nayeon.png",
+      "ayeon",
+      "images/characters/4-hongbo.png",
       modelPosition.center,
-      imageShowType.FadeIn
-    )
+      imageShowType.FadeIn,
+    ),
+    TextBarEvent.text(null, "아연 누나가 버스킹 공연을 하고 있다."),
   ])
-  .addTextPage("동희", "나연눈나!")
-  .addTextPage("나연", "응?")
+  .addTextPage("나", "헉,.,..,,.., .!! 1!!!")
+
+  .addEventsAsPage([
+    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
+  ])
+  .addEventsAsPage([
+    DelayEvent.delay(500),
+    CanvasEvent.addImage(
+      "iu",
+      "images/characters/4-iu.png",
+      modelPosition.center,
+      imageShowType.FadeIn,
+    ),
+    TextBarEvent.text(null, "순간 누나가 아이유로 보였다. 성균관대 아이유 곽아연?"),
+  ])
+  .addTextPage(null, "그 순간,")
+  .addEventsAsPage([
+    CanvasEvent.removeObject("iu", imageHideType.Disappear),
+  ])
+  .addEventsAsPage([
+    DelayEvent.delay(500),
+    CanvasEvent.addImage(
+      "ayeon",
+      "images/characters/4-eyecontact.png",
+      modelPosition.center,
+      imageShowType.FadeIn,
+    ),
+    SoundEvent.sfx("audio/heartbreak.mp3"),
+    TextBarEvent.text(null, "눈이 마주쳤다. 이런... . 난 그녀의 노예가 된 것이다.")
+  ])
+  .addTextPage(null, "<사랑>의 노예 ...........")
+
+  .addEventsAsPage([
+    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
+  ])
+  .addTextPage(null, "정신 차리고 보니 나는 지원서를 쓰고 있었다. 어떤 세션으로 들어갈까?")
+  .addTextPage(null, "보컬은 안 된다. 눈아랑 공연해야 하니까.")
   .addEventsAsPage([
     TextBarEvent.branch([
-      new BranchPair("저기...", "branch_5"),
-      new BranchPair("나랑 밥 먹으러 갈래?", "branch_4_1")
+      new BranchPair("1. 드럼", "branch_4_1_1"),
+      new BranchPair("2. 기타", "branch_4_1_2"),
+      new BranchPair("3. 피아노", "branch_4_1_3"),
+      new BranchPair("4. 베이스", "branch_4_1_4"),
     ])
   ]);
 textGame.addBranch(branch_4);
 
-const branch_4_1 = new Branch("branch_4_1", null)
-  .addTextPage("동희", "나랑 같이 밥 먹으러 갈래?")
-  .addTextPage(
-    "나연",
-    "그럴까? 어제 약속한것도 있고, 마침 배도 고팠는데 잘됐다."
-  )
-  .addTextPage("...", "성공이다 성공! 드디어 나연누나와 밥을 먹을 수 있다!")
+const branch_4_1_1 = new Branch("branch_4_1_1", "branch_4_2")
+  .addTextPage(null, "나는 드럼으로 가입 지원서를 냈다.")
+textGame.addBranch(branch_4_1_1);
+
+const branch_4_1_2 = new Branch("branch_4_1_2", "branch_4_2")
+  .addTextPage(null, "나는 기타로 가입 지원서를 냈다.")
+textGame.addBranch(branch_4_1_2);
+
+const branch_4_1_3 = new Branch("branch_4_1_3", "branch_4_2")
+  .addTextPage(null, "나는 피아노로 가입 지원서를 냈다.")
+textGame.addBranch(branch_4_1_3);
+
+const branch_4_1_4 = new Branch("branch_4_1_4", "branch_4_2")
+  .addTextPage(null, "나는 베이스로 가입 지원서를 냈다.")
+textGame.addBranch(branch_4_1_4);
+
+const branch_4_2 = new Branch("branch_4_2", null)
+  .addTextPage(null, "한 곡을 끝낸 아연 누나가 내게로 온다.")
   .addEventsAsPage([
     CanvasEvent.addImage(
-      "shadow",
-      "images/characters/Shadow.png",
-      modelPosition.right,
-      imageShowType.FadeIn
-    )
+      "ayeon",
+      "images/characters/4-hongbo.png",
+      modelPosition.center,
+      imageShowType.FadeIn,
+    ),
   ])
-  .addTextPage(
-    "반 친구1",
-    "나연아 우리 같이 밥 먹으러 가자! 학교 앞에 새로 생긴 떡볶이집 진짜 맛있더라!"
-  )
-  .addTextPage(
-    "...",
-    "위험해 위험해 위험해. 나연누나와 밥 먹을 기회가 날아가게 생겼다! 제발 나연눈나가 나를 선택해주기를..."
-  )
-  .addTextPage(
-    "나연",
-    "미안, 오늘은 동희랑 같이 먹기로 해서. 다음에 같이 먹자."
-  )
+  .addTextPage("아연", "땡땡이 왔네? 공연 어땠어?")
   .addEventsAsPage([
-    CanvasEvent.removeObject("shadow", imageHideType.Disappear)
-  ])
-  .addTextPage("...", "감사합니다 신이시여.. 나연눈나시여....")
-  .addEventsAsPage([
-    CanvasEvent.removeObject("nayeon", imageHideType.Disappear)
-  ])
-  .addEventsAsPage([
-    CanvasEvent.changeBackGround("images/backgrounds/mealWithNayoen.png"),
-    DelayEvent.delay(2000)
-  ])
-  .addEndingAsPage("END - 밥먹기 성공");
+    TextBarEvent.branch([
+      new BranchPair("너무좋았어요누나그냥완전천사여신미쳤어요", "branch_4_2_1"),
+      new BranchPair("좋았어요!", "branch_4_2_2"),
+      new BranchPair("걍 그렇던데요?", "branch_4_2_3"),
+    ])
+  ]);
+textGame.addBranch(branch_4_2);
 
-textGame.addBranch(branch_4_1);
+const branch_4_2_1 = new Branch("branch_4_2_1", "branch_4_3")
+  .addTextPage("아연", "아...~ㅎㅎ; 고마워~")
+textGame.addBranch(branch_4_2_1);
 
+const branch_4_2_2 = new Branch("branch_4_2_2", "branch_4_3")
+  .addTextPage("아연", "정말? 다행이다!")
+textGame.addBranch(branch_4_2_2);
+
+const branch_4_2_3 = new Branch("branch_4_2_3", "branch_4_3")
+  .addTextPage("아연", "아ㅎㅎ; 취향 아닐 수 있지~")
+textGame.addBranch(branch_4_2_3);
+
+const branch_4_3 = new Branch("branch_4_3", "branch_5")
+  .addTextPage("아연", "밴드부 지원했구나! 같이 재밌게 해 보자~")
+  .addTextPage(null, "그렇게 난 기계들의 합창 신입 부원이 되었다. 아연 누나랑 같이 공연하면서 친해져야지!")
+textGame.addBranch(branch_4_3);
+
+
+// 동아리 엠티
 const branch_5 = new Branch("branch_5", null)
   .addTextPage("동희", "그 있잖아 오늘..")
   .addEventsAsPage([
@@ -476,4 +520,3 @@ const branch_6_2 = new Branch("branch_6_2", null)
   .addEndingAsPage("TRUE END - 꿈");
 
 textGame.addBranch(branch_6_2);
-*/
