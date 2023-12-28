@@ -137,27 +137,30 @@ textGame.addBranch(branch_3_1_2);
 const rand = Math.random();
 const branch_3_2 = new Branch("branch_3_2", null)
   .addEventsAsPage([
+    SoundEvent.stopbackground(),
+    SoundEvent.background("audio/background/3-realsusin.mp3"),
     CanvasEvent.addImage( // 네이비즘
       "navysim",
       "images/navysim.png",
       modelPosition.center,
       imageShowType.FadeIn,
     ),
-    SoundEvent.stopbackground(),
-    SoundEvent.background("audio/background/3-realsusin.mp3"),
-    TextBarEvent.text(null, "1초에 내 운명이 결정된다… 59.95초! 클릭한다!")
-  ])
-  .addEventsAsPage([
+    TextBarEvent.text(null, "1초에 내 운명이 결정된다… 59.95초! 클릭한다!"),
     TextBarEvent.branch([
       new BranchPair("클릭하기", (rand <= 0.5) ? "branch_3_2_1" : "branch_3_2_2")
+      // new BranchPair("ㅋㄹ", "branch_3_2_1")
     ])
-  ]);
+  ])
 textGame.addBranch(branch_3_2);
 
 const branch_3_2_1 = new Branch("branch_3_2_1", "branch_4")
   .addEventsAsPage([
-    CanvasEvent.removeObject("navysim", imageHideType.Disappear),
     TextBarEvent.text(null, "[계획했던 대로 올클리어!]"),
+    CanvasEvent.removeObject("navysim", imageHideType.Disappear),
+    DelayEvent.delay(500),
+  ])
+  .addTextPage(null, "여기저기서 욕설이 들리는 가운데, 나는 계획했던 모든 과목을 전부 신청했다.")
+  .addEventsAsPage([
     CanvasEvent.addImage(
       "ayeon",
       "images/characters/3-sugang.png",
@@ -166,7 +169,6 @@ const branch_3_2_1 = new Branch("branch_3_2_1", "branch_4")
     ),
   ])
   .addTextPage("아연", "뭐야~ 대단하잖아!")
-  .addTextPage(null, "여기저기서 욕설이 들리는 가운데, 아연 누나가 칭찬을 해 주었다.")
   .addTextPage("아연", "나는 교수님께 증원 메일 보내야 해서 ㅎㅎ 먼저 가~")
   .addTextPage(null, "누나에게 인사를 하고 나왔다. 대학생활의 첫 단추를 잘 끼운 것 같다!")
   .addEventsAsPage([
@@ -176,8 +178,12 @@ textGame.addBranch(branch_3_2_1);
 
 const branch_3_2_2 = new Branch("branch_3_2_2", "branch_4")
   .addEventsAsPage([
-    CanvasEvent.removeObject("navysim", imageHideType.Disappear),
     TextBarEvent.text(null, "[연달아 뜨는 실패 팝업]"),
+    CanvasEvent.removeObject("navysim", imageHideType.Disappear),
+    DelayEvent.delay(500),
+  ])
+  .addTextPage(null, "이런! 손이 느려서 학점 잘 주기로 소문난 교수님 수업을 3개 놓쳤다.")
+  .addEventsAsPage([
     CanvasEvent.addImage(
       "ayeon",
       "images/characters/3-sugang.png",
@@ -185,7 +191,6 @@ const branch_3_2_2 = new Branch("branch_3_2_2", "branch_4")
       imageShowType.FadeIn,
     ),
   ])
-  .addTextPage(null, "이런! 손이 느려서 학점 잘 주기로 소문난 교수님 수업을 3개 놓쳤다.")
   .addTextPage("아연", "망했구나? 첫 수강신청이면 그럴 수 있어. 괜찮아~ 누나랑 같이 증원 신청 메일 쓰자.")
   .addTextPage(null, "대신 누나와 함께 교수님께 보낼 메일을 쓰며 친해질 수 있었다. 오히려 좋아!")
   .addEventsAsPage([
@@ -193,6 +198,9 @@ const branch_3_2_2 = new Branch("branch_3_2_2", "branch_4")
   ])
 textGame.addBranch(branch_3_2_2);
 
+
+
+/*
 const branch_4 = new Branch("branch_4", null) // 동아리 홍보 부스, 여기부터 시작!
   .addTextPage(
     "...",
@@ -468,3 +476,4 @@ const branch_6_2 = new Branch("branch_6_2", null)
   .addEndingAsPage("TRUE END - 꿈");
 
 textGame.addBranch(branch_6_2);
+*/
