@@ -1,6 +1,7 @@
 const textGame = new TextGame();
+const love = 0;
 
-const branch_1 = new Branch("branch_1", "branch_2") // 내 대학생활은 어떻게...
+const branch_1 = new Branch("branch_1", "branch_9") // 내 대학생활은 어떻게...
   .addEventsAsPage([
     CanvasEvent.changeBackGround("images/backgrounds/1-howto.png"),
     SoundEvent.background("audio/background/1-dokidoki.mp3"),
@@ -62,7 +63,6 @@ const branch_2 = new Branch("branch_2", "branch_3_1") // 새내기 배움터
   .addTextPage("선배1", "하하, 여러분! 벌써부터 너무 겁먹지 마시구요~ 분위기도 업~! 시킬겸 동아리 공연 시작할게요~!")
 
   .addEventsAsPage([
-    CanvasEvent.removeObject("shadow", imageHideType.Disappear),
     TextBarEvent.text(null, "[그 때...]"),
     DelayEvent.delay(1000),
     CanvasEvent.addImage(
@@ -121,17 +121,11 @@ textGame.addBranch(branch_3_1);
 
 const branch_3_1_1 = new Branch("branch_3_1_1", "branch_3_2")
   .addTextPage("아연", "응응 ㅎㅎ 나 옆자리에 앉는다? 올클(올클리어)해!")
-  .addEventsAsPage([
-    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
-  ])
   .addTextPage(null, "어느덧 9시 55분! 준비해 보자.")
 textGame.addBranch(branch_3_1_1);
 
 const branch_3_1_2 = new Branch("branch_3_1_2", "branch_3_2")
   .addTextPage("아연", "아 ㅎ; 그래~ 수고해~")
-  .addEventsAsPage([
-    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
-  ])
   .addTextPage(null, "아연 누나는 수강신청하러 사라졌다. 나도 이제 해 볼까?")
 textGame.addBranch(branch_3_1_2);
 
@@ -210,9 +204,9 @@ const branch_4 = new Branch("branch_4", null) // 동아리 홍보 부스
   .addTextPage(null, "오늘은 동아리 홍보 부스 날이다.")
   .addTextPage("나", "아연 누나가 기계들의 합창 보컬이라고 했지? 부스가 어디 있나...")
   .addTextPage(null, "[어디선가 감미로운 노랫소리가 들린다.]")
-  .addTextPage("나", "저기인가 보다!")
   .addEventsAsPage([
     SoundEvent.sfx("audio/Walk.mp3"),
+    TextBarEvent.text("나", "저기인가 보다!")
   ])
   .addEventsAsPage([
     SoundEvent.stopbackground(),
@@ -223,15 +217,11 @@ const branch_4 = new Branch("branch_4", null) // 동아리 홍보 부스
       modelPosition.center,
       imageShowType.FadeIn,
     ),
-    TextBarEvent.text(null, "아연 누나가 버스킹 공연을 하고 있다."),
-    SoundEvent.sfx("audio/ayeon.mp3")
+    TextBarEvent.text(null, "아연 누나가 버스킹 공연을 하고 있다.")
   ])
   .addTextPage("나", "헉,.,..,,.., .!! 1!!!")
-
   .addEventsAsPage([
-    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
-  ])
-  .addEventsAsPage([
+    SoundEvent.sfx("audio/ayeon.mp3"),
     DelayEvent.delay(500),
     CanvasEvent.addImage(
       "iu",
@@ -242,9 +232,6 @@ const branch_4 = new Branch("branch_4", null) // 동아리 홍보 부스
     TextBarEvent.text(null, "순간 누나가 아이유로 보였다. 성균관대 아이유 곽아연?"),
   ])
   .addTextPage(null, "그 순간,")
-  .addEventsAsPage([
-    CanvasEvent.removeObject("iu", imageHideType.Disappear),
-  ])
   .addEventsAsPage([
     DelayEvent.delay(500),
     CanvasEvent.addImage(
@@ -260,6 +247,8 @@ const branch_4 = new Branch("branch_4", null) // 동아리 홍보 부스
 
   .addEventsAsPage([
     CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
+    SoundEvent.stopbackground(),
+    SoundEvent.background("audio/background/4-hongbo.mp3"),
   ])
   .addTextPage(null, "정신 차리고 보니 나는 지원서를 쓰고 있었다. 어떤 세션으로 들어갈까?")
   .addTextPage(null, "보컬은 안 된다. 눈아랑 공연해야 하니까.")
@@ -365,9 +354,6 @@ const branch_5 = new Branch("branch_5", null) // 동아리 엠티
   .addTextPage(null, "헉... 27학번 퀸카 박민지? 쟤가 왜 나한테 오는 거지...?")
   .addTextPage("민지", "안녕? 술 깨는 데에는 이 초코에몽이 좋대. 마실래?")
   .addEventsAsPage([
-    CanvasEvent.removeObject("minji", imageHideType.Disappear),
-  ])
-  .addEventsAsPage([
     CanvasEvent.addImage(
       "choco",
       "images/5-choco.png",
@@ -405,9 +391,9 @@ const branch_5_2 = new Branch("branch_5_2", null)
       modelPosition.center,
       imageShowType.FadeIn,
     ),
-    SoundEvent.sfx("audio/ayeon.mp3")
+    SoundEvent.sfx("audio/ayeon.mp3"),
+    TextBarEvent.text("아연", "땡땡이 술 많이 마셨어? 나랑 바람 쐬고 올까? 아이스크림 사러 가자!")
   ])
-  .addTextPage("아연", "땡땡이 술 많이 마셨어? 나랑 바람 쐬고 올까? 아이스크림 사러 가자!")
   .addTextPage(null, "헉… 누나가 나에게 단둘이 산책을 <제안>했다! 오늘따라 다들 나에게 왜 이러는 거얏~")
   .addEventsAsPage([
     TextBarEvent.branch([
@@ -418,6 +404,7 @@ const branch_5_2 = new Branch("branch_5_2", null)
 textGame.addBranch(branch_5_2);
 
 const branch_5_2_1 = new Branch("branch_5_2_1", "branch_5_3")
+  .addTextPage("아연", "아 ㅎ; 넌 메로나나 먹어~")
   .addEventsAsPage([
     CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
     TextBarEvent.text(null, "그렇게 아연 누나가 혼자 아이스크림을 사 와서 동아리 부원들에게 나눠주었다."),
@@ -444,17 +431,14 @@ const branch_5_3 = new Branch("branch_5_3", null)
     TextBarEvent.text("동기1", "너 그것도 몰라? 친구가 네 애인 깻잎을 젓가락으로 잡아줄 때, 용서할 수 있는지에 대한 논쟁이야!")
   ])
   .addEventsAsPage([
-    CanvasEvent.removeObject("wow", imageHideType.Disappear),
-  ])
-  .addEventsAsPage([
     CanvasEvent.addImage(
       "shadow",
       "images/characters/Shadow.png",
       modelPosition.center,
       imageShowType.FadeIn
-    )
+    ),
+    TextBarEvent.text("선배1", "야, 난 결사반대야! 왜 다른 이성이 밥 먹는 걸 신경 써 주고 있는 거야!")
   ])
-  .addTextPage("선배1", "야, 난 결사반대야! 왜 다른 이성이 밥 먹는 걸 신경 써 주고 있는 거야!")
   .addTextPage("선배2", "에이, 그게 뭐 어때서! 그건 그냥 배려지!")
   .addTextPage("선배1,2", "어이, 땡땡이는 어떻게 생각해?")
   .addTextPage(null, "헉... 어떡하지? 아연 누나가 지켜보고 있는데...")
@@ -468,18 +452,34 @@ textGame.addBranch(branch_5_3);
 
 const branch_5_3_1 = new Branch("branch_5_3_1", "branch_6")
   .addEventsAsPage([
-    CanvasEvent.removeObject("shadow", imageHideType.Disappear),
+    CanvasEvent.addImage(
+      "ayeon",
+      "images/characters/5-mt.png",
+      modelPosition.center,
+      imageShowType.FadeIn,
+    ),
     TextBarEvent.text("아연", "와, 땡땡이는 순정남이구나~"),
   ])
   .addTextPage(null, "누나가 좋아한 것 같다...! 그렇게 엠티가 마무리되었다.")
+  .addEventsAsPage([
+    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
+  ])
 textGame.addBranch(branch_5_3_1);
 
 const branch_5_3_2 = new Branch("branch_5_3_2", "branch_6")
   .addEventsAsPage([
-    CanvasEvent.removeObject("shadow", imageHideType.Disappear),
+    CanvasEvent.addImage(
+      "ayeon",
+      "images/characters/5-mt.png",
+      modelPosition.center,
+      imageShowType.FadeIn,
+    ),
     TextBarEvent.text("아연", "그렇구나... 땡땡이는 다른 여자한테 한눈팔 스타일이네~!")
   ])
   .addTextPage(null, "망한 것 같다... 그렇게 엠티가 마무리되었다.")
+  .addEventsAsPage([
+    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
+  ])
 textGame.addBranch(branch_5_3_2);
 
 const branch_6 = new Branch("branch_6", null) // 공부는 해라
@@ -588,9 +588,6 @@ textGame.addBranch(branch_6_2);
 const branch_6_2_1 = new Branch("branch_6_2_1", "branch_7")
   .addTextPage(null, "나는 아연 누나 일편단심이지만 어떤 쪽지인지 모르니까... 받아볼까?")
   .addEventsAsPage([
-    CanvasEvent.removeObject("yubin", imageHideType.Disappear),
-  ])
-  .addEventsAsPage([
     CanvasEvent.addImage(
       "letter",
       "images/6-letter.png",
@@ -608,9 +605,6 @@ textGame.addBranch(branch_6_2_1);
 const branch_6_2_2 = new Branch("branch_6_2_2", "branch_7")
   .addTextPage(null, "나는 아연 누나 일편단심. 모르는 여자의 플러팅은 <거절>한다.")
   .addTextPage(null, "여자가 어이없어하며 쪽지를 두고 갔다.")
-  .addEventsAsPage([
-    CanvasEvent.removeObject("yubin", imageHideType.Disappear),
-  ])
   .addEventsAsPage([
     CanvasEvent.addImage(
       "letter",
@@ -677,7 +671,6 @@ textGame.addBranch(branch_7_1_1);
 const branch_7_1_2 = new Branch("branch_7_1_2", null) // 한 번 튕김
   .addEventsAsPage([
     SoundEvent.sfx("audio/katalk.mp3"),
-    CanvasEvent.removeObject("phone", imageHideType.Disappear),
     CanvasEvent.addImage(
       "seoyoung",
       "images/characters/7-seoyoung.png",
@@ -688,9 +681,6 @@ const branch_7_1_2 = new Branch("branch_7_1_2", null) // 한 번 튕김
   ])
   .addTextPage(null, "뭐라고? 아연 누나가 술자리에??")
   .addEventsAsPage([
-    CanvasEvent.removeObject("seoyoung", imageHideType.Disappear),
-  ])
-  .addEventsAsPage([
     TextBarEvent.branch([
       new BranchPair("공부는 나중에 하지 뭐!", "branch_7_1_1"),
       new BranchPair("에이, 시험이 코 앞인데...", "branch_7_1_2_1"),
@@ -700,22 +690,32 @@ textGame.addBranch(branch_7_1_2);
 
 const branch_7_1_2_1 = new Branch("branch_7_1_2_1", "branch_8") // 둘 다 거절
   .addEventsAsPage([
+    CanvasEvent.removeObject("seoyoung", imageHideType.Disappear),
     SoundEvent.stopbackground(),
     SoundEvent.background("audio/background/3-realsusin.mp3"),
+    TextBarEvent.text(null, "그렇게 나는 친구들이 단체로 아연 누나를 둘러싸고 찍은 돈룩업 사진을 인스타 스토리로 보며 오열했다.")
   ])
-  .addTextPage(null, "그렇게 나는 친구들이 단체로 아연 누나를 둘러싸고 찍은 돈룩업 사진을 인스타 스토리로 보며 오열했다.")
 textGame.addBranch(branch_7_1_2_1);
 
 const branch_7_2 = new Branch("branch_7_2", "branch_8")
   .addEventsAsPage([
+    CanvasEvent.removeObject("seoyoung", imageHideType.Disappear),
     CanvasEvent.changeBackGround("images/backgrounds/7-soju.png"),
-    TextBarEvent.text(null, "[동기 모임]"),
+    TextBarEvent.text(null, "[학과 모임]"),
     SoundEvent.stopbackground(),
     SoundEvent.background("audio/background/7-soju.mp3"),
     DelayEvent.delay(2000),
     TextBarEvent.text(null, "나는 그렇게 아연 누나 옆자리를 지키며 재미있게 놀 수 있었다."),
   ])
-  .addTextPage("동기1", "우리 인생네컷 찍으러 갈래?")
+  .addEventsAsPage([
+    CanvasEvent.addImage(
+      "shadow",
+      "images/characters/Shadow.png",
+      modelPosition.center,
+      imageShowType.FadeIn,
+    ),
+    TextBarEvent.text("동기1", "우리 인생네컷 찍으러 갈래?")
+  ])
   .addEventsAsPage([
     CanvasEvent.addImage(
       "ayeon",
@@ -727,15 +727,12 @@ const branch_7_2 = new Branch("branch_7_2", "branch_8")
   ])
   .addEventsAsPage([
     SoundEvent.sfx("audio/heartbreak.mp3"),
-  ])
-  .addTextPage(null, "살짝 취한 누나가 내 손을 잡고 앞서갔다.")
-  .addEventsAsPage([
-    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
+    TextBarEvent.text(null, "살짝 취한 누나가 내 손을 잡고 앞서갔다.")
   ])
   .addEventsAsPage([
     CanvasEvent.addImage(
       "ayeon",
-      "images/characters/7-dontlookup.JPG",
+      "images/characters/7-dontlookup.jpg",
       modelPosition.center,
       imageShowType.FadeIn
     ),
@@ -746,49 +743,205 @@ const branch_7_2 = new Branch("branch_7_2", "branch_8")
   ])
 textGame.addBranch(branch_7_2);
 
-/*
-  .addTextPage(
-    "반 친구1",
-    "나연아 우리 같이 밥 먹으러 가자! 학교 앞에 새로 생긴 떡볶이집 진짜 맛있더라!" 
-  )
+const branch_8 = new Branch("branch_8", null) // 고백
   .addEventsAsPage([
-    CanvasEvent.addImage(
-      "shadow2",
-      "images/characters/Shadow.png",
-      modelPosition.right,
-      imageShowType.FadeIn
-    )
+    CanvasEvent.changeBackGround("images/backgrounds/6-home.jpg"),
+    TextBarEvent.text(null, "[집]"),
+    DelayEvent.delay(2000),
+    SoundEvent.stopbackground(),
+    SoundEvent.background("audio/background/8-goback.mp3"),
   ])
-  .addTextPage("반 친구2", "맞아! 어제 가봤는데 완전 장난 아니야.")
-  .addTextPage(
-    "...",
-    "어떻게 말해야 할지 고민하던 중 다른 애들이 몰려와 말할 기회를 놓쳐버렸다."
-  )
-  .addTextPage("나연", "동희야 밥은 다음에 사줘, 오늘은 약속이 생겨서")
-  .addTextPage("동희", "아.. 으응..")
-  .addEventsAsPage([
-    CanvasEvent.removeObject("nayeon", imageHideType.Disappear),
-    CanvasEvent.removeObject("shadow1", imageHideType.Disappear),
-    CanvasEvent.removeObject("shadow2", imageHideType.Disappear)
-  ])
-  .addTextPage("...", "어쩔 수 없나.. 다음을 기약해야겠다.")
-  .addEventsAsPage([
-    CanvasEvent.changeBackGround("images/backgrounds/home.jpg"),
-    TextBarEvent.text(null, "[다음날 집]")
-  ])
-  .addTextPage(
-    "...",
-    "어제는 실패했지만 오늘은 토요일! 오늘 점심이 두번째 기회다."
-  )
-  .addTextPage("...", "나연누나에게 먼저 연락해볼까?")
+  .addTextPage("나", "그래, 결심했어.")
+  .addTextPage(null, "누나를 향한 내 마음이 너무 커져버렸다. 고백하지 않고는,, 참을 수 없어!")
+  .addTextPage(null, "그런데 어떻게 고백할까?")
   .addEventsAsPage([
     TextBarEvent.branch([
-      new BranchPair("지금은 연락할 때가 아니다", "branch_6"),
-      new BranchPair("연락해보자", "branch_5_1")
+      new BranchPair("카톡으로 고백하자.", "branch_8_1_1"),
+      new BranchPair("전화로 고백하자.", "branch_8_1_2"),
+      new BranchPair("만나서 하자.", "branch_8_1_3"),
     ])
-  ]);
-textGame.addBranch(branch_5);
+  ])
+textGame.addBranch(branch_8);
 
+const branch_8_1_1 = new Branch("branch_8_1_1", "branch_11_1") // 카톡 고백
+  .addTextPage(null, "너무 떨리니까 카톡으로 말하자.")
+  .addEventsAsPage([
+    CanvasEvent.addImage(
+      "phone",
+      "images/characters/phoneBlack.png",
+      modelPosition.center,
+      imageShowType.FadeIn
+    ),
+    TextBarEvent.text(null, "[휴대폰 화면]")
+  ])
+  .addEventsAsPage([
+    CanvasEvent.addImage(
+      "phone",
+      "images/characters/phoneTalk.png",
+      modelPosition.center,
+      imageShowType.FadeIn
+    ),
+    TextBarEvent.text("나", "누나 저랑 사궈?주세요? 사겨? 주실레요?")
+  ])
+  .addTextPage(null, "[3시간 뒤...]")
+  .addEventsAsPage([
+    SoundEvent.sfx("audio/katalk.mp3"),
+    TextBarEvent.text(null, "(카톡!)")
+  ])
+  .addTextPage("아연", "미안, 난 맞춤법 틀리는 남자는 싫어.")
+  .addTextPage(null, "이럴 수가. 누나는 맞춤법을 중요하게 생각했구나…. 그렇게 누나를 다시는 볼 수 없게 되었다.")
+  .addEventsAsPage([
+    CanvasEvent.removeObject("phone", imageHideType.Disappear),
+  ])
+textGame.addBranch(branch_8_1_1);
+
+const branch_8_1_2 = new Branch("branch_8_1_2", "branch_11_1") // 전화 고백
+  .addTextPage(null, "떨리니까 전화로 말하자.")
+  .addEventsAsPage([
+    CanvasEvent.addImage(
+      "phone",
+      "images/characters/phoneBlack.png",
+      modelPosition.center,
+      imageShowType.FadeIn
+    ),
+    SoundEvent.sfx("audio/PhoneRing.mp3"),
+    TextBarEvent.text(null, "(뚜르르...)")
+  ])
+  .addTextPage("나", "누나 뭐해요?")
+  .addTextPage("아연", "쇼츠 보고 있었는데 왜?")
+  .addTextPage("나", "저기… 아연아… 나랑 사귈래? 누난 내 여자니까…")
+  .addEventsAsPage([
+    SoundEvent.stopbackground(),
+    SoundEvent.background("audio/background/8-yourmine.mp3"),
+    TextBarEvent.text(null, "[이승기 - 내 여자라니까]")
+  ])
+  .addTextPage(null, "어라? 5분이 지났는데 누나가 아무 말도 안 한다…")
+  .addTextPage("아연", "미안. 난 반말하는 연하는 싫어.")
+  .addTextPage(null, "이럴 수가. 누나는 유교걸이었다…. 그렇게 누나를 다시는 볼 수 없게 되었다.")
+  .addEventsAsPage([
+    CanvasEvent.removeObject("phone", imageHideType.Disappear),
+  ])
+textGame.addBranch(branch_8_1_2);
+
+const branch_8_1_3 = new Branch("branch_8_1_3", null) // 만나서 고백
+  .addTextPage(null, "만나서 어떻게 할까?")
+  .addEventsAsPage([
+    TextBarEvent.branch([
+      new BranchPair("K-옛날드라마에서는 이렇게 하던데… 자동차에 풍선 담아서 공개고백으로 누나를 놀래켜 주자!", "branch_8_2_1"),
+      new BranchPair("누나한테 밥 사 달라고 약속 잡고 내가 사 주면서 고백하자!", "branch_8_2_2"),
+    ])
+  ])
+textGame.addBranch(branch_8_1_3);
+
+const branch_8_2_1 = new Branch("branch_8_2_1", "branch_11_1") // 풍선 고백
+  .addTextPage(null, "결심했어. 누나한테 2시간 뒤에 학생회관 앞에서 보자고 하자!")
+  .addTextPage(null, "[2시간 뒤...]")
+  .addEventsAsPage([
+    CanvasEvent.changeBackGround("images/backgrounds/8-school.png"),
+    TextBarEvent.text(null, "[학생회관 앞]"),
+    DelayEvent.delay(2000),
+    SoundEvent.stopbackground(),
+    SoundEvent.background("audio/background/8-sad.mp3"),
+  ])
+  .addTextPage(null, "부모님한테 빌린 차 트렁크에 하트 모양 풍선을 담고, 정장까지 챙겨 입었다. 분명 누나가 좋아하겠지?")
+  .addEventsAsPage([
+    CanvasEvent.addImage(
+      "ayeon",
+      "images/characters/8-goback.png",
+      modelPosition.center,
+      imageShowType.FadeIn
+    ),
+    SoundEvent.sfx("audio/ayeon.mp3"),
+    TextBarEvent.text("아연", "땡땡아~ 나 왔어!")
+  ])
+  .addTextPage("아연", "웬 정장이야? 그런데 학관 앞에 웬 자동차가 있더라…ㅎㅎ 학교 안에 주차하면 안 되는데…")
+  .addTextPage("나", "누나… 그거 우리 엄마 차예요.")
+  .addTextPage("아연", "어? 미안…")
+  .addTextPage(null, "어색해졌다. 하지만 마음 먹은 건 반드시 해내는 나. 차 앞으로 누나를 데려간 뒤 트렁크를 열어 하트 모양 풍선을 하늘에 띄웠다.")
+  .addTextPage("나", "누나, 나랑 사귈래?")
+  .addEventsAsPage([
+    SoundEvent.sfx("audio/kalkal.mp3"),
+    TextBarEvent.text(null, "[구경꾼들의 웃음소리]")
+  ])
+  .addEventsAsPage([
+    SoundEvent.sfx("audio/charkack.mp3"),
+    TextBarEvent.text("아연", "꺄아아악!!!")
+  ])
+  .addTextPage(null, "아뿔싸! 아연 누나가 비명을 지르며 도망쳤다… 그렇게 누나를 다시는 볼 수 없게 되었다.")
+  .addEventsAsPage([
+    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
+  ])
+textGame.addBranch(branch_8_2_1);
+
+const branch_8_2_2 = new Branch("branch_8_2_2", null) // 밥약 고백
+  .addEventsAsPage([
+    CanvasEvent.changeBackGround("images/backgrounds/8-bapyack.png"),
+    TextBarEvent.text(null, "[식당 앞]"),
+    DelayEvent.delay(2000),
+    SoundEvent.stopbackground(),
+    SoundEvent.background("audio/background/8-bapyack.mp3"),
+  ])
+  .addTextPage(null, "그렇게 밥약을 핑계로 저녁을 먹고… 대신 내가 계산하며 누나와 화기애애하게 밖으로 나왔다.")
+  .addEventsAsPage([
+    CanvasEvent.addImage(
+      "ayeon",
+      "images/characters/8-goback.png",
+      modelPosition.center,
+      imageShowType.FadeIn
+    ),
+    TextBarEvent.text("아연", "얻어 먹어서 어떡해~ 다음에 누나가 맛있는 거 사 줄게! ㅎㅎ")
+  ])
+  .addTextPage("나", "그럼 누나… 밥 사 주는 거 말고 저랑 사귀면 안 돼요? 저 누나 좋아해요.")
+  .addEventsAsPage([
+    TextBarEvent.branch([
+      new BranchPair("고백하기", (love >= 40) ? "branch_8_3_1" : "branch_8_3_2")
+      // new BranchPair("ㅋㄹ", "branch_8_2_1")
+    ])
+  ])
+textGame.addBranch(branch_8_2_2);
+
+const branch_8_3_1 = new Branch("branch_8_3_1", "branch_9") // 수락
+  .addTextPage("아연", "이러려고 밥 먹자 했구나? ㅎㅎ")
+  .addTextPage(null, "너무 떨린다… 누나가 잠시 뜸을 들이더니 나를 쳐다보며 웃었다.")
+  .addEventsAsPage([
+    CanvasEvent.addImage(
+      "ayeon",
+      "images/characters/8-good.png",
+      modelPosition.center,
+      imageShowType.FadeIn
+    ),
+    TextBarEvent.text("아연", "그럼 오늘부터 1일, 이다?")
+  ])
+  .addEventsAsPage([
+    SoundEvent.sfx("audio/heartbreak.mp3"),
+  ])
+  .addTextPage("나", "헉 .. . . .. , , ,, .")
+  .addTextPage(null, "너무 떨려서 그만 기절했다.")
+  .addEventsAsPage([
+    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
+  ])
+textGame.addBranch(branch_8_3_1);
+
+const branch_8_3_2 = new Branch("branch_8_3_2", "branch_11_1") // 거절
+  .addEventsAsPage([
+    SoundEvent.stopbackground(),
+    SoundEvent.background("audio/background/3-realsusin.mp3"),
+    CanvasEvent.addImage(
+      "ayeon",
+      "images/characters/8-bad.png",
+      modelPosition.center,
+      imageShowType.FadeIn
+    ),
+    TextBarEvent.text("아연", "…? 미안. 우리 그런 사이 아닌 것 같아. 넌 좋은 동생이야…")
+  ])
+  .addTextPage("아연", "불편하니까 동아리는 나가주면 좋겠어. 난 에이스라 못 나가.")
+  .addTextPage(null, "아뿔싸! 누나는 아니었나 보다… 그렇게 누나를 다시는 볼 수 없게 되었다.")
+  .addEventsAsPage([
+    CanvasEvent.removeObject("ayeon", imageHideType.Disappear),
+  ])
+textGame.addBranch(branch_8_3_2);
+
+/*
 const branch_5_1 = new Branch("branch_5_1", null)
   .addTextPage("동희", "오늘 같이 밥 먹으러 갈래?")
   .addTextPage("나연", "그럴까? 오늘 마침 시간이 남는데, 잘됐다.")
