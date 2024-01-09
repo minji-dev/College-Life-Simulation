@@ -125,10 +125,24 @@ class TextGame {
             case TextbarEventType.Branch:
                 this._isBranching = true;
                 let selectedData = [];
-                textBarEvent.eventData.forEach((item) => selectedData.push(item.name));
-                this._textBarController.showBranch(textBarEvent.eventData, this);
+                if (typeof textBarEvent.eventData === 'function') {
+                    // If eventData is a function, execute it and handle the result
+                    const result = textBarEvent.eventData();
+                    if (Array.isArray(result)) {
+                        result.forEach((item) => selectedData.push(item.name));
+                        this._textBarController.showBranch(result, this);
+                    } else {
+                        console.error("Result of the branch function is not an array:", result);
+                    }
+                } else if (Array.isArray(textBarEvent.eventData)) {
+                    // If eventData is already an array, use it directly
+                    textBarEvent.eventData.forEach((item) => selectedData.push(item.name));
+                    this._textBarController.showBranch(textBarEvent.eventData, this);
+                } else {
+                    console.error("Event data for branch is neither an array nor a function:", textBarEvent.eventData);
+                }
                 break;
-        
+
             default:
                 break;
         }

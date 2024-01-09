@@ -887,10 +887,13 @@ const branch_8_2_2 = new Branch("branch_8_2_2", null) // 밥약 고백
   ])
   .addTextPage("나", "그럼 누나… 밥 사 주는 거 말고 저랑 사귀면 안 돼요? 저 누나 좋아해요.")
   .addEventsAsPage([
-    TextBarEvent.branch([
-      new BranchPair("고백하기", (textGame.loveLevel >= 40) ? "branch_8_3_1" : "branch_8_3_2", 0)
-      // new BranchPair("ㅋㄹ", "branch_8_3_1", 0)
-    ])
+    TextBarEvent.branch(() => {
+      const currentLoveLevel = textGame.loveLevel;
+      console.log(`Current Love Level: ${currentLoveLevel}`);
+      return [
+        new BranchPair("고백하기", (currentLoveLevel >= 40) ? "branch_8_3_1" : "branch_8_3_2")
+      ];
+    })
   ])
 textGame.addBranch(branch_8_2_2);
 
