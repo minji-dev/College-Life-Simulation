@@ -1,6 +1,6 @@
 # 브라우저 미연시 게임: 두근두근 대학생활 시뮬레이션
 
-### [PlayLink](https://developdh.github.io/HowToMeaLWithNayeon/main)
+### [PlayLink](https://minji-dev.github.io/College-Life-Simulation/main)
 
 OKIS 글로벌 멘토링 B조 수업을 위한 시뮬레이션입니다.
 
