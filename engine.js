@@ -8,10 +8,12 @@ class TextGame {
         this._currentPageIndex = 0;
         this._delaytimer = null;
         this._isBranching = false;
+        this._love = 0;
     }
     
     get textBarController() { return this._textBarController; }
     get canvasController() { return this._canvasController; }
+    get loveLevel() { return this._love; }
 
     //branch: Branch
     addBranch(branch) {
@@ -233,6 +235,9 @@ class TextGame {
         } else {
             o._currentBranch = jumpBranch;
             o._currentPageIndex = 0;
+
+            o._love += branchPair.value;
+            console.log(`Love Level: ${o._love}`);
         }
         o._isBranching = false;
     }
@@ -348,9 +353,10 @@ class TextPair {
 
 class BranchPair {
     //name: String, branch: Branch
-    constructor(name, branch) {
+    constructor(name, branch, value) {
         this._name = name;
         this._branch = branch;
+        this._value = value;
     }   
 
     //return: String
@@ -358,6 +364,8 @@ class BranchPair {
     
     //return: Branch
     get branch() { return this._branch; }
+
+    get value() { return this._value; }
 }
 
 class CanvasEvent extends BaseEvent {
