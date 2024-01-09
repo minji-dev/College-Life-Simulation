@@ -1,6 +1,6 @@
 const textGame = new TextGame();
 
-const branch_1 = new Branch("branch_1", null) // 내 대학생활은 어떻게...
+const branch_1 = new Branch("branch_1", "branch_2") // 내 대학생활은 어떻게...
   .addEventsAsPage([
     CanvasEvent.changeBackGround("images/backgrounds/1-howto.png"),
     SoundEvent.background("audio/background/1-dokidoki.mp3"),
