@@ -253,7 +253,7 @@ const branch_4 = new Branch("branch_4", null) // 동아리 홍보 부스
     TextBarEvent.branch([
       new BranchPair("1. 드럼", "branch_4_1_1", 0),
       new BranchPair("2. 기타", "branch_4_1_2", 0),
-      new BranchPair("3. 피아노", "branch_4_1_3", 0),
+      new BranchPair("3. 키보드", "branch_4_1_3", 0),
       new BranchPair("4. 베이스", "branch_4_1_4", 0),
     ])
   ]);
@@ -268,7 +268,7 @@ const branch_4_1_2 = new Branch("branch_4_1_2", "branch_4_2")
 textGame.addBranch(branch_4_1_2);
 
 const branch_4_1_3 = new Branch("branch_4_1_3", "branch_4_2")
-  .addTextPage(null, "나는 피아노로 가입 지원서를 냈다.")
+  .addTextPage(null, "나는 키보드로 가입 지원서를 냈다.")
 textGame.addBranch(branch_4_1_3);
 
 const branch_4_1_4 = new Branch("branch_4_1_4", "branch_4_2")
@@ -727,7 +727,7 @@ const branch_7_2 = new Branch("branch_7_2", "branch_8")
   .addEventsAsPage([
     CanvasEvent.addImage(
       "ayeon",
-      "images/characters/7-dontlookup.jpg",
+      "images/characters/7-dontlookup.JPG",
       modelPosition.center,
       imageShowType.FadeIn
     ),
