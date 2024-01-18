@@ -1,6 +1,6 @@
 const textGame = new TextGame();
 
-const branch_1 = new Branch("branch_1", "branch_2") // 내 대학생활은 어떻게...
+const branch_1 = new Branch("branch_1", "branch_9_2") // 내 대학생활은 어떻게...
   .addEventsAsPage([
     CanvasEvent.changeBackGround("images/backgrounds/1-howto.png"),
     SoundEvent.background("audio/background/1-dokidoki.mp3"),
@@ -254,7 +254,7 @@ const branch_4 = new Branch("branch_4", null) // 동아리 홍보 부스
       new BranchPair("1. 드럼", "branch_4_1_1", 0),
       new BranchPair("2. 기타", "branch_4_1_2", 0),
       new BranchPair("3. 키보드", "branch_4_1_3", 0),
-      new BranchPair("4. 베이스", "branch_4_1_4", 0),
+      // new BranchPair("4. 베이스", "branch_4_1_4", 0),
     ])
   ]);
 textGame.addBranch(branch_4);
@@ -271,9 +271,9 @@ const branch_4_1_3 = new Branch("branch_4_1_3", "branch_4_2")
   .addTextPage(null, "나는 키보드로 가입 지원서를 냈다.")
 textGame.addBranch(branch_4_1_3);
 
-const branch_4_1_4 = new Branch("branch_4_1_4", "branch_4_2")
-  .addTextPage(null, "나는 베이스로 가입 지원서를 냈다.")
-textGame.addBranch(branch_4_1_4);
+// const branch_4_1_4 = new Branch("branch_4_1_4", "branch_4_2")
+//   .addTextPage(null, "나는 베이스로 가입 지원서를 냈다.")
+// textGame.addBranch(branch_4_1_4);
 
 const branch_4_2 = new Branch("branch_4_2", null)
   .addTextPage(null, "한 곡을 끝낸 아연 누나가 내게로 온다.")
@@ -393,7 +393,7 @@ const branch_5_2 = new Branch("branch_5_2", null)
   .addTextPage(null, "헉… 누나가 나에게 단둘이 산책을 <제안>했다! 오늘따라 다들 나에게 왜 이러는 거얏~")
   .addEventsAsPage([
     TextBarEvent.branch([
-      new BranchPair("아뇨, 오늘 날씨 너무 춥던데요. 아이스크림 사러 가실 거면 저는 돼지바로 부탁 드려요.", "branch_5_2_1", -20),
+      new BranchPair("아뇨, 오늘 날씨 너무 춥던데요. 돼지바 부탁 드려요.", "branch_5_2_1", -20),
       new BranchPair("네 누나! 마침 산책 나가고 싶었어요!", "branch_5_2_2", 10),
     ])
   ])
@@ -609,7 +609,7 @@ const branch_6_2_2 = new Branch("branch_6_2_2", "branch_7")
     ),
     TextBarEvent.text("쪽지", "타이핑 소리 너무 시끄러워요. 키 스킨 착용해 주세요."),
   ])
-  .addTextPage(null, "쪽지를 펼쳐 본 아연누나가 옆에서 조용히 웃는다. 너무 예쁘잖냐 ,  ~~!!")
+  .addTextPage(null, "쪽지를 펼쳐 본 아연누나가 옆에서 조용히 웃는다. 너무 예쁘잖냐,~!!")
   .addEventsAsPage([
     CanvasEvent.removeObject("letter", imageHideType.Disappear),
   ])
@@ -1022,12 +1022,13 @@ const branch_9_2 = new Branch("branch_9_2", null)
   ])
   .addTextPage("나", "누나, 공연 어때요? 누나 NCT 좋아하잖아요!")
   .addTextPage("아연", "응응! 너무 신난다! 근데 내 키가 작아서 그런가…? 무대가 잘 안 보여 ㅠㅠ")
-  .addTextPage(null, "헉… 그렇다. 아연 누나는 요정처럼 <아담>한 키를 가지고 있다. 어떻게 해야 무대가 잘 보이도록 도와줄 수 있을까?")
+  .addTextPage(null, "헉… 그렇다. 아연 누나는 요정처럼 <아담>한 키를 가지고 있다.")
+  .addTextPage(null, "어떻게 해야 무대가 잘 보이도록 도와줄 수 있을까?")
   .addEventsAsPage([
     TextBarEvent.branch([
-      new BranchPair("(발을 내어주며) 누나! 제 발을 딛고 올라서보세요! 잘 보이죠?", "branch_9_2_1", 0),
-      new BranchPair("잘 안 보이세요? 아쉽네요 누나. 오늘 NCT 다들 너무 잘생겼는데요?", "branch_9_2_2", 0),
-      new BranchPair("제쪽으로 더 가까이 와 보세요 누나. (누나를 위해 개발한 안경을 씌워 주며)", "branch_9_2_3", 0),
+      new BranchPair("(발을 내어주며) 제 발 딛고 서보세요! 잘 보이죠?", "branch_9_2_1", 0),
+      new BranchPair("아쉽네요 누나. 오늘 NCT 너무 잘생겼는데요?", "branch_9_2_2", 0),
+      // new BranchPair("(누나를 위해 개발한 안경을 씌워 준다)", "branch_9_2_3", 0),
     ])
   ])
 textGame.addBranch(branch_9_2);
@@ -1056,22 +1057,22 @@ const branch_9_2_2 = new Branch("branch_9_2_2", "branch_10")
   ])
 textGame.addBranch(branch_9_2_2);
 
-const branch_9_2_3 = new Branch("branch_9_2_3", "branch_10")
-  .addEventsAsPage([
-    CanvasEvent.addImage(
-      "glasses",
-      "images/9-glasses.JPG",
-      modelPosition.center,
-      imageShowType.FadeIn
-    ),
-    TextBarEvent.text(null, "이 날을 위해 준비했지. 키 작은 누나를 위한 거울 반사 안경이다.")
-  ])
-  .addTextPage("아연", "헉 뭐야… 이 스마트한 공대남… 지적인 모습에 설레는데?")
-  .addTextPage(null, "누나에게 지적인 공대남의 면모를 보여줄 수 있었다. 하하.")
-  .addEventsAsPage([
-    CanvasEvent.removeObject("glasses", imageHideType.Disappear)
-  ])
-textGame.addBranch(branch_9_2_3);
+// const branch_9_2_3 = new Branch("branch_9_2_3", "branch_10")
+//   .addEventsAsPage([
+//     CanvasEvent.addImage(
+//       "glasses",
+//       "images/9-glasses.JPG",
+//       modelPosition.center,
+//       imageShowType.FadeIn
+//     ),
+//     TextBarEvent.text(null, "이 날을 위해 준비했지. 키 작은 누나를 위한 거울 반사 안경이다.")
+//   ])
+//   .addTextPage("아연", "헉 뭐야… 이 스마트한 공대남… 지적인 모습에 설레는데?")
+//   .addTextPage(null, "누나에게 지적인 공대남의 면모를 보여줄 수 있었다. 하하.")
+//   .addEventsAsPage([
+//     CanvasEvent.removeObject("glasses", imageHideType.Disappear)
+//   ])
+// textGame.addBranch(branch_9_2_3);
 
 const branch_10 = new Branch("branch_10", null)
   .addEventsAsPage([
